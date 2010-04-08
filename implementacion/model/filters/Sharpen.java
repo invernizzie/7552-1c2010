@@ -1,5 +1,7 @@
 package model.filters;
 
+import model.filters.masks.impl.Convolver;
+
 public class Sharpen extends Convolver {
 
 	private final int clamp(int c) {

@@ -1,6 +1,8 @@
 package model.filters;
 
-public class Blur extends Convolver{
+import model.filters.masks.impl.Convolver;
+
+public class Blur extends Convolver {
 
 	@Override
 	public void convolve() {

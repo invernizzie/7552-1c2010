@@ -1,14 +1,34 @@
-package model.filters;
+package model.filters.masks.impl;
+
+import model.filters.Filter;
 
 import java.awt.*;
 import java.awt.image.*;
 import java.util.Hashtable;
 
 public abstract class Convolver implements ImageConsumer, Filter {
-	int width, height;
-	int imgpixels[], newimgpixels[];
+	protected int width;
+    protected int height;
+	protected int[] imgpixels;
+    protected int[] newimgpixels;
 	
 	public abstract void convolve();
+
+    public Image filter(Image in) {
+		in.getSource().startProduction(this);
+		//waitForImage();
+		newimgpixels = new int[width*height];
+
+		try {
+			convolve();
+		} catch (Exception e) {
+			System.out.println("Fallo Convolver: " + e);
+			e.printStackTrace();
+		}
+		Canvas c = new Canvas();
+		return c.createImage(new MemoryImageSource(width, height, newimgpixels, 0, width));
+
+	}
 	
 	public synchronized void imageComplete(int dummy) {
 		notifyAll();		
@@ -64,22 +84,6 @@ public abstract class Convolver implements ImageConsumer, Filter {
 
 	public void setProperties(Hashtable<?, ?> dummy) { }
 
-	public Image filter(Image in) {
-		in.getSource().startProduction(this);
-		//waitForImage();
-		newimgpixels = new int[width*height];
-		
-		try {
-			convolve();
-		} catch (Exception e) {
-			System.out.println("Fallo Convolver: " + e);
-			e.printStackTrace();
-		}
-		Canvas c = new Canvas();
-		return c.createImage(new MemoryImageSource(width, height, newimgpixels, 0, width));
-		
-	}
-	
 	synchronized void waitForImage(){
 		try { wait(); } catch (Exception e) { };
 	}
