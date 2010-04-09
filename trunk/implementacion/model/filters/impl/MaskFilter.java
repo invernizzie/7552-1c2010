@@ -15,11 +15,11 @@ public class MaskFilter implements Filter {
 
     List<Mask> masks = new ArrayList<Mask>();
 
-    void addMask(int index, Mask mask) {
+    public void addMask(int index, Mask mask) {
         masks.add(index, mask);
     }
 
-    void addMask(Mask mask) {
+    public void addMask(Mask mask) {
         masks.add(mask);
     }
 

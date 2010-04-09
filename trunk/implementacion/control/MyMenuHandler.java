@@ -5,6 +5,10 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.ImageIO;
+
+import model.filters.impl.MaskFilter;
+import model.filters.masks.impl.InvalidMaskException;
+import model.filters.masks.impl.SimpleMask;
 import view.components.MyFrame;
 import control.MyDialogHandler;
 import model.filters.*;
@@ -129,8 +133,19 @@ public class MyMenuHandler implements ActionListener, ItemListener{
 				filter = new Blur();
 			reset_filtros=true;
 		}else if(arg.equals("Sharpen")){
-			if(aux.getState())	
-				filter = new Sharpen();
+			if(aux.getState()) {
+				//filter = new Sharpen();
+                MaskFilter mf = new MaskFilter();
+                filter = mf;
+                try {
+                    // TODO Crear constantes para las mascaras
+                    mf.addMask(SimpleMask.create(new double[][] {
+                            {-1.0/8, -1.0/8, -1.0/8},
+                            {-1.0/8,      2, -1.0/8},
+                            {-1.0/8, -1.0/8, -1.0/8} }));
+                } catch (InvalidMaskException e) {}
+
+            }
 			reset_filtros=true;
 		}
 		Image img=null;
