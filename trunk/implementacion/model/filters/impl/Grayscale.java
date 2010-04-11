@@ -1,4 +1,6 @@
-package model.filters;
+package model.filters.impl;
+
+import model.filters.Filter;
 
 import java.awt.Canvas;
 import java.awt.Image;
