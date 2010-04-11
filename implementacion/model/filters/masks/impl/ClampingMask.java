@@ -9,22 +9,22 @@ import java.awt.*;
  * @author Esteban I. Invernizzi
  * @created 07/04/2010
  */
-public class SimpleMask implements Mask {
+public class ClampingMask implements Mask {
 
     private double[][] coefs;
     private int width, height;
     int imgpixels[], newimgpixels[];
 
-    public static SimpleMask create(double[][] coefs) throws InvalidMaskException {
+    public static ClampingMask create(double[][] coefs) throws InvalidMaskException {
 
         testCreate(coefs);
-        SimpleMask result = new SimpleMask();
+        ClampingMask result = new ClampingMask();
         result.coefs = coefs;
         return result;
     }
 
     public Image apply(Image image) {
-        SimpleMaskConvolver convolver = new SimpleMaskConvolver();
+        ClampingMaskConvolver convolver = new ClampingMaskConvolver();
         return convolver.filter(image);
     }
 
@@ -39,13 +39,13 @@ public class SimpleMask implements Mask {
             if (coefs[i].length != height)
                 throw new InvalidMaskException();
     }
+    
+    private ClampingMask() {}
 
-    private class SimpleMaskConvolver extends Convolver {
+    private class ClampingMaskConvolver extends Convolver {
 
         @Override
         public void convolve() {
-
-            // TODO Cambiar lo que hace aca (es Sharpen) por la aplicacion de una mascara cualquiera
 
             for(int y=1; y<height-1; y++) {
                 for(int x=1; x<width-1; x++) {
@@ -67,13 +67,11 @@ public class SimpleMask implements Mask {
                     }
                     newimgpixels[y*width+x] = (0xff000000 |
                     clamp(newR) << 16 | clamp(newG) << 8 | clamp(newB));
-                    /* TODO Mover el clamping a la mascara normalizada
-                    newimgpixels[y*width+x] = (0xff000000 | newR << 16 | newG << 8 | newB); */
                 }
             }
         }
 
-        private final int clamp(int c) {
+        private int clamp(int c) {
             return ( c > 255 ? 255 : (c < 0 ? 0 : c));
         }
     }
