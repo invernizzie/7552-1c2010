@@ -1,5 +1,7 @@
 package control.command;
 
+import control.command.exceptions.CommandExecutionException;
+
 /**
  * @author Esteban I. Invernizzi (invernizzie@gmail.com)
  * @created 11/04/2010

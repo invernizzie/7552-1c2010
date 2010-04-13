@@ -5,12 +5,16 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 
+import control.command.CommandFactory;
+import control.command.exceptions.CommandExecutionException;
 import model.filters.impl.Contrast;
 import model.filters.impl.Grayscale;
 import model.filters.impl.Invert;
 import control.Constants;
 import control.MasksEnum;
+import view.components.CommandComponent;
 import view.components.MyFrame;
 import control.MyDialogHandler;
 import model.filters.*;
@@ -18,6 +22,7 @@ import model.filters.*;
 public class MyMenuHandler implements ActionListener, ItemListener{
 
 	private MyFrame myframe;
+    // TODO Pertenece a esta clase??
 	private String ruta;
 	
 	public MyMenuHandler(MyFrame f){
@@ -26,115 +31,73 @@ public class MyMenuHandler implements ActionListener, ItemListener{
 	
 	//Gestion de eventos de accion (botones comunes)
 	public void actionPerformed(ActionEvent ae){
-        // TODO Implementar patron command
-		String arg = (String)ae.getActionCommand();
-		if(arg.equals("Abrir...")){
-			FileDialog fd = new FileDialog(myframe,"Abrir",FileDialog.LOAD);
-			fd.setFile("*.jpg");
-			fd.setLocation(new Point(350,120));
-			fd.setVisible(true);
-			if (fd.getFile()!=null && fd.getDirectory()!=null){
-				BufferedImage img = null;
-				try {
-				    img = ImageIO.read(new File(fd.getDirectory()+fd.getFile()));
-				    ruta = fd.getDirectory()+fd.getFile();
-				    myframe.setImage(img);
-				    myframe.setImageOrig(img);
-				    myframe.getGrayscale().setEnabled(true);
-				    myframe.getResetButton().setEnabled(true);
-				    myframe.getAjustarTamanio().setEnabled(true);
-				    setMenuFiltros(true);
-				    myframe.repaint();
-				} catch (IOException e) {
-					System.out.println("Error al abrir el archivo");
-				}
-			}
-		}else if(arg.equals("Guardar")){
-			if(ruta != null){
-				try{
-					BufferedImage bi = new BufferedImage(myframe.getImage().getWidth(null), myframe.getImage().getHeight(null), BufferedImage.TYPE_INT_RGB);
-					Graphics2D g2d = bi.createGraphics();
-					g2d.drawImage(myframe.getImage(),0,0,null);
-					g2d.dispose();
-					ImageIO.write(bi, "jpg", new File(ruta));
-				}catch(IOException e){
-					System.out.println("Error al escribir el archivo");
-				}
-			}
-		}else if(arg.equals("Guardar Como...")){
-			FileDialog fd = new FileDialog(myframe,"Guardar Como",FileDialog.SAVE);
-			fd.setFile("*.jpg");
-			fd.setLocation(new Point(350,120));
-			fd.setVisible(true);
-			try{
-				if (fd.getFile()!=null && fd.getDirectory()!=null){
-					BufferedImage bi = new BufferedImage(myframe.getImage().getWidth(null), myframe.getImage().getHeight(null), BufferedImage.TYPE_INT_RGB);
-					Graphics2D g2d = bi.createGraphics();
-					g2d.drawImage(myframe.getImage(),0,0,null);
-					g2d.dispose();
-					ImageIO.write(bi, "jpg", new File(fd.getDirectory()+fd.getFile()));
-				}
-			}catch(IOException e){
-				System.out.println("Error al escribir el archivo");
-			}
-		}else if(arg.equals("Resetear")){
-			myframe.setImage(myframe.getImageOrig());
-			setMenuFiltros(true);
-			myframe.getGrayscale().setState(false);
-			myframe.repaint();
-		}else if(arg.equals("Ajustar Tama�o...")){
-			Dialog d = new Dialog(myframe,"Ajustar Tama�o",true);
-			d.setSize(new Dimension(250,100));
-			d.setLocation(new Point(500,300));
-			d.setLayout(new FlowLayout());
-			TextField ancho, alto;
-			ancho = new TextField(3);
-			alto = new TextField(3);
-			d.add(new Label("Ancho: ",Label.RIGHT));
-			d.add(ancho);
-			d.add(new Label("Alto: ",Label.RIGHT));
-			d.add(alto);
-			Button accept,cancel;
-			d.add(accept = new Button("Aceptar"));
-			d.add(cancel = new Button("Cancelar"));
-			MyDialogHandler dh = new MyDialogHandler(d,myframe);
-			accept.addActionListener(dh);
-			cancel.addActionListener(dh);
-			d.setVisible(true);			
-		}else if(arg.equals("Salir")){
-			myframe.dispose();
-			System.exit(0);
-		}
+
+        Object source = ae.getSource();
+        if (!(source instanceof CommandComponent))
+            return;
+
+        CommandComponent component = (CommandComponent) source;
+        try {
+            component.getCommand().execute();
+        } catch (CommandExecutionException e) {
+            String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
+            String cause = e.getCause() == null ? "" : ("Causa" + e.getCause().toString());
+            JOptionPane.showMessageDialog(
+                    myframe, command + "\n" + cause,
+                    "Error al ejecutar Command",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 	}
 	
-	private void setMenuFiltros(boolean habilitar){
+    public void setMenuFiltros(boolean habilitar){
 		Menu filtros = myframe.getMenuFiltos();
 		filtros.setEnabled(habilitar);
 		for(int i=0;i<filtros.getItemCount();i++)
 			((CheckboxMenuItem)filtros.getItem(i)).setState(!habilitar);
 	}
 	
-	//Gesti�n de eventos de botones "checkbox"
+	//Gestion de eventos de botones "checkbox"
 	public void itemStateChanged(ItemEvent ie){
+
+        CheckboxMenuItem checkbox = (CheckboxMenuItem)ie.getItemSelectable();
+        checkbox.setState(false);
+
+        Object source = ie.getSource();
+        if (!(source instanceof CommandComponent))
+            return;
+
+        CommandComponent component = (CommandComponent) source;
+        try {
+            component.getCommand().execute();
+        } catch (CommandExecutionException e) {
+            String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
+            String cause = e.getCause() == null ? "" : ("Causa" + e.getCause().toString());
+            JOptionPane.showMessageDialog(
+                    myframe, command + "\n" + cause,
+                    "Error al ejecutar Command",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+        /*
 		CheckboxMenuItem aux = (CheckboxMenuItem)ie.getItemSelectable();
-		String arg = (String)aux.getActionCommand();
+		String command = (String)aux.getActionCommand();
 		Filter filter=null;
 		boolean reset_filtros=false;
-		if(arg.equals("Escala de Grises")){
+		if(command.equals(CommandFactory.GRAYSCALE_FILTER)){
 			if(aux.getState())
 				filter = new Grayscale();
 			reset_filtros=true;
-		}else if(arg.equals("Invertir")){
+		}else if(command.equals(CommandFactory.INVERSION_FILTER)){
 			filter = new Invert();
-		}else if(arg.equals("Contraste")){
+		}else if(command.equals(CommandFactory.CONTRAST_FILTER)){
 			if(aux.getState())	
 				filter = new Contrast();
 			reset_filtros=true;
-		}else if(arg.equals("Blur")){
+		}else if(command.equals(CommandFactory.getCommandName(MasksEnum.BLUR))){
 			if(aux.getState())	
 				filter = Constants.getMaskFilter(MasksEnum.BLUR);
 			reset_filtros=true;
-		}else if(arg.equals("Sharpen")){
+		}else if(command.equals(CommandFactory.getCommandName(MasksEnum.SHARPEN))){
 			if(aux.getState())
                 filter = Constants.getMaskFilter(MasksEnum.SHARPEN);
 			reset_filtros=true;
@@ -151,6 +114,14 @@ public class MyMenuHandler implements ActionListener, ItemListener{
 				img = filter.filter(myframe.getImage());
 		}
 		myframe.setImage(img);
-		myframe.repaint();
+		myframe.repaint();*/
 	}
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
 }

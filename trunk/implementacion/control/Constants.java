@@ -1,10 +1,10 @@
 package control;
 
 import control.MasksEnum;
+import model.filters.masks.impl.InvalidMaskException;
 import model.filters.impl.MaskFilter;
 import model.filters.masks.Mask;
 import model.filters.masks.impl.ClampingMask;
-import model.filters.masks.impl.InvalidMaskException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +35,11 @@ public class Constants {
     }
 
     public static MaskFilter getMaskFilter(MasksEnum mask) throws NoSuchElementException {
-        MaskFilter result = new MaskFilter();
+
         if (!masks.containsKey(mask))
             throw new NoSuchElementException("Mask " + mask.name() + " not registered.");
+
+        MaskFilter result = new MaskFilter();
         result.addMask(masks.get(mask));
         return result;
     }

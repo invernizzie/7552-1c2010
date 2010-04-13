@@ -3,17 +3,24 @@ package view.components;
 import java.awt.*;
 import java.awt.event.*;
 
+import control.MasksEnum;
 import control.MyMenuHandler;
+import control.command.Command;
+import control.command.CommandFactory;
+import control.command.MyFrameCommand;
+import control.command.exceptions.CommandConstructionException;
+
+import javax.swing.*;
 
 // Subclase de Frame
 @SuppressWarnings("serial")
 public class MyFrame extends Frame{
 	
-	private CheckboxMenuItem grayScale, invertir, contraste, sharpen, blur;
+	private CommandCheckboxMenuItem grayScale, invertir, contraste, sharpen, blur;
 	private Image imageOrig;
 	private Image image;
 	private Menu filtros;
-	private MenuItem reset, ajustar_tamanio;
+	private CommandMenuItem reset, ajustar_tamanio;
 	private int ancho, alto;
 	private final static int anchoMenu = 50;
 	private final static int anchoIzquierdo = 7;
@@ -24,47 +31,129 @@ public class MyFrame extends Frame{
 		alto=0;
 		imageOrig=null;
 		image=null;	
-		// Se crea una barra de men�s y se a�ade al frame
+        //Se crea un objeto para gestionar los eventos del menu
+		MyMenuHandler handler = new MyMenuHandler(this);
+        // Se crea una barra de menus y se añade al frame
 		MenuBar mbar = new MenuBar();
-		setMenuBar(mbar);
-		
-		//Se crean los elementos del men�
-		Menu archivo = new Menu("Archivo");
-		MenuItem item1, item2, item3, item4, item5;
-		archivo.add(item1 = new MenuItem("Abrir..."));
-		archivo.add(item2 = new MenuItem("Guardar"));
-		archivo.add(item3 = new MenuItem("Guardar Como..."));
-		archivo.add(item4 = new MenuItem("-"));
-		archivo.add(item5 = new MenuItem("Salir"));
-		mbar.add(archivo);
-		
-		Menu herramientas = new Menu("Herramientas");
-		herramientas.add(ajustar_tamanio = new MenuItem("Ajustar Tama�o..."));
-		ajustar_tamanio.setEnabled(false);
-		herramientas.add(reset = new MenuItem("Resetear"));
-		reset.setEnabled(false);
-		grayScale = new CheckboxMenuItem("Escala de Grises");
-		herramientas.add(grayScale);
-		grayScale.setEnabled(false);
-		
-		filtros = new Menu("Filtros");
-		filtros.add(invertir = new CheckboxMenuItem("Invertir"));
-		filtros.add(contraste = new CheckboxMenuItem("Contraste"));
-		filtros.add(blur = new CheckboxMenuItem("Blur"));
-		filtros.add(sharpen = new CheckboxMenuItem("Sharpen"));
-		herramientas.add(filtros);
-		filtros.setEnabled(false);
+        Menu herramientas = null;
+        CommandMenuItem open = null, save = null, saveAs = null, exit = null;
+        
+        try {
+
+            // TODO Setear atributos de los commands
+            // TODO Crear un metodo en CommandFactory que setee el Frame y el MenuHandler
+
+            MyFrameCommand mfc;
+
+            //Se crean los elementos del men�
+            Menu archivo = new Menu("Archivo");
+            open = new CommandMenuItem();
+            open.setLabel("Abrir...");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.FILE_OPEN);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            open.setCommand(mfc);
+            save = new CommandMenuItem();
+            save.setLabel("Guardar");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.FILE_SAVE);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            save.setCommand(mfc);
+            saveAs = new CommandMenuItem();
+            saveAs.setLabel("Guardar Como...");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.FILE_SAVE_AS);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            saveAs.setCommand(mfc);
+            exit = new CommandMenuItem();
+            exit.setLabel("Salir");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.EXIT);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            exit.setCommand(mfc);
+            archivo.add(open);
+            archivo.add(save);
+            archivo.add(saveAs);
+            archivo.add(new MenuItem("-"));
+            archivo.add(exit);
+            mbar.add(archivo);
+
+            ajustar_tamanio = new CommandMenuItem();
+            ajustar_tamanio.setLabel("Ajustar Tamaño...");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.RESIZE);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            ajustar_tamanio.setCommand(mfc);
+            ajustar_tamanio.setEnabled(false);
+            reset = new CommandMenuItem();
+            reset.setLabel("Resetear");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.RESET);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            reset.setCommand(mfc);
+            reset.setEnabled(false);
+            grayScale = new CommandCheckboxMenuItem();
+            grayScale.setLabel("Escala de Grises");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.GRAYSCALE_FILTER);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            grayScale.setCommand(mfc);
+            grayScale.setEnabled(false);
+            herramientas = new Menu("Herramientas");
+            herramientas.add(ajustar_tamanio);
+            herramientas.add(reset);
+            herramientas.add(grayScale);
+
+            invertir = new CommandCheckboxMenuItem();
+            invertir.setLabel("Invertir");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.INVERSION_FILTER);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            invertir.setCommand(mfc);
+            contraste = new CommandCheckboxMenuItem();
+            contraste.setLabel("Contraste");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.CONTRAST_FILTER);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            contraste.setCommand(mfc);
+            blur = new CommandCheckboxMenuItem();
+            blur.setLabel("Blur");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(MasksEnum.BLUR);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            blur.setCommand(mfc);
+            sharpen = new CommandCheckboxMenuItem();
+            sharpen.setLabel("Sharpen");
+            mfc = (MyFrameCommand)CommandFactory.getCommand(MasksEnum.SHARPEN);
+            mfc.setFrame(this);
+            mfc.setMenuHandler(handler);
+            sharpen.setCommand(mfc);
+            filtros = new Menu("Filtros");
+            filtros.add(invertir);
+            filtros.add(contraste);
+            filtros.add(blur);
+            filtros.add(sharpen);
+            herramientas.add(filtros);
+            filtros.setEnabled(false);
+        } catch (CommandConstructionException e) {
+            String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
+            String cause = e.getCause() == null ? "" : ("Causa" + e.getCause().toString());
+            JOptionPane.showMessageDialog(
+                    this, command + "\n" + cause,
+                    "Error al construir Command",
+                    JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            System.exit(0);
+        }
 		
 		mbar.add(herramientas);
-		
-		//Se crea un objeto para gestionar los eventos del men�
-		MyMenuHandler handler = new MyMenuHandler(this);
-		//Se registra para recibir esos eventos
-		item1.addActionListener(handler);
-		item2.addActionListener(handler);
-		item3.addActionListener(handler);
-		item4.addActionListener(handler);
-		item5.addActionListener(handler);
+        setMenuBar(mbar);
+
+		//Se registra MyMenuHandler para recibir los eventos
+		open.addActionListener(handler);
+		save.addActionListener(handler);
+		saveAs.addActionListener(handler);
+		exit.addActionListener(handler);
 		reset.addActionListener(handler);
 		ajustar_tamanio.addActionListener(handler);
 		grayScale.addItemListener(handler);
@@ -147,10 +236,10 @@ public class MyFrame extends Frame{
 		}		
 		
 	}
-	
-	/*public void update(Graphics g){
-		paint(g);
-	}*/
+
+    /*public void update(Graphics g){
+         paint(g);
+     }*/
 		
 	class MyWindowAdapter extends WindowAdapter {			
 		public void windowClosing(WindowEvent we){
