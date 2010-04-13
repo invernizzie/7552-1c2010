@@ -1,5 +1,6 @@
 package model.filters.masks.impl;
 
+import model.filters.masks.impl.InvalidMaskException;
 import model.filters.masks.Mask;
 
 import java.awt.*;
