@@ -29,13 +29,10 @@ public class CommandFileOpen extends MyFrameCommand {
 				BufferedImage img = null;
 				try {
 				    img = ImageIO.read(new File(fd.getDirectory()+fd.getFile()));
-				    menuHandler.setRuta(fd.getDirectory() + fd.getFile());
+				    frame.setRuta(fd.getDirectory() + fd.getFile());
 				    frame.setImage(img);
 				    frame.setImageOrig(img);
-				    frame.getGrayscale().setEnabled(true);
-				    frame.getResetButton().setEnabled(true);
-				    frame.getAjustarTamanio().setEnabled(true);
-				    menuHandler.setMenuFiltros(true);
+				    frame.enableProcessing();
 				    frame.repaint();
 				} catch (IOException e) {
 					System.out.println("Error al abrir el archivo");

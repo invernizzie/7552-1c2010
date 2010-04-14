@@ -6,6 +6,7 @@ import control.command.exceptions.CommandConstructionException;
 import model.filters.impl.Contrast;
 import model.filters.impl.Grayscale;
 import model.filters.impl.Invert;
+import view.components.MyFrame;
 
 import java.util.NoSuchElementException;
 
@@ -72,8 +73,48 @@ public class CommandFactory {
         }
     }
 
+    public static Command getCommand(MasksEnum[] masks) throws CommandConstructionException {
+        try {
+            return new FilterCommand(Constants.getMaskFilter(masks));
+        } catch (NoSuchElementException e) {
+            throw new CommandConstructionException(e, null);
+        }
+    }
+
     public static String getCommandName(MasksEnum mask) {
         return MASK_FILTER_PREFIX.concat(mask.name());
     }
 
+    public static MyFrameCommand buildCommand(String commandName, MyFrame frame) throws CommandConstructionException {
+
+        Command command  = CommandFactory.getCommand(commandName);
+        if (!(command instanceof MyFrameCommand))
+            throw new CommandConstructionException(command);
+
+        MyFrameCommand mfc = (MyFrameCommand)command;
+        mfc.setFrame(frame);
+        return mfc;
+    }
+
+    public static MyFrameCommand buildCommand(MasksEnum mask, MyFrame frame) throws CommandConstructionException {
+
+        Command command = CommandFactory.getCommand(mask);
+        if (!(command instanceof MyFrameCommand))
+            throw new CommandConstructionException(command);
+
+        MyFrameCommand mfc = (MyFrameCommand)command;
+        mfc.setFrame(frame);
+        return mfc;
+    }
+
+     public static MyFrameCommand buildCommand(MasksEnum[] masks, MyFrame frame) throws CommandConstructionException {
+
+        Command command = CommandFactory.getCommand(masks);
+        if (!(command instanceof MyFrameCommand))
+            throw new CommandConstructionException(command);
+
+        MyFrameCommand mfc = (MyFrameCommand)command;
+        mfc.setFrame(frame);
+        return mfc;
+    }
 }

@@ -7,5 +7,12 @@ package control;
 public enum MasksEnum {
 
     SHARPEN,
-    BLUR;
+    BLUR,
+    LOW_PASS,
+    SMOOTH,
+    MID_PASS,
+    GAUSS_LOW_PASS,
+    LAPLACIAN,
+    PREWITT_1,
+    PREWITT_2;
 }

@@ -1,7 +1,14 @@
 package view.components;
 
-import java.awt.*;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.MenuBar;
+import java.awt.CheckboxMenuItem;
+import java.awt.Graphics;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import control.MasksEnum;
 import control.MyMenuHandler;
@@ -16,11 +23,26 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class MyFrame extends Frame{
 	
-	private CommandCheckboxMenuItem grayScale, invertir, contraste, sharpen, blur;
+	private CommandCheckboxMenuItem
+            grayScale,
+            invertir,
+            contraste,
+            sharpen,
+            blur;
+    private String ruta;
 	private Image imageOrig;
 	private Image image;
 	private Menu filtros;
-	private CommandMenuItem reset, ajustar_tamanio;
+	private CommandMenuItem
+            reset,
+            ajustar_tamanio,
+            lowpass,
+            smooth,
+            midpass,
+            gaussLowpass,
+            laplacian,
+            prewitt;
+    private java.util.List<MenuItem> processingMIs = new ArrayList<MenuItem>();
 	private int ancho, alto;
 	private final static int anchoMenu = 50;
 	private final static int anchoIzquierdo = 7;
@@ -40,37 +62,20 @@ public class MyFrame extends Frame{
         
         try {
 
-            // TODO Setear atributos de los commands
-            // TODO Crear un metodo en CommandFactory que setee el Frame y el MenuHandler
-
-            MyFrameCommand mfc;
-
-            //Se crean los elementos del men�
+            //Se crean los elementos del menu
             Menu archivo = new Menu("Archivo");
             open = new CommandMenuItem();
             open.setLabel("Abrir...");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.FILE_OPEN);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            open.setCommand(mfc);
+            open.setCommand(CommandFactory.buildCommand(CommandFactory.FILE_OPEN, this));
             save = new CommandMenuItem();
             save.setLabel("Guardar");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.FILE_SAVE);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            save.setCommand(mfc);
+            save.setCommand(CommandFactory.buildCommand(CommandFactory.FILE_SAVE, this));
             saveAs = new CommandMenuItem();
             saveAs.setLabel("Guardar Como...");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.FILE_SAVE_AS);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            saveAs.setCommand(mfc);
+            saveAs.setCommand(CommandFactory.buildCommand(CommandFactory.FILE_SAVE_AS, this));
             exit = new CommandMenuItem();
             exit.setLabel("Salir");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.EXIT);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            exit.setCommand(mfc);
+            exit.setCommand(CommandFactory.buildCommand(CommandFactory.EXIT, this));
             archivo.add(open);
             archivo.add(save);
             archivo.add(saveAs);
@@ -80,24 +85,15 @@ public class MyFrame extends Frame{
 
             ajustar_tamanio = new CommandMenuItem();
             ajustar_tamanio.setLabel("Ajustar Tamaño...");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.RESIZE);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            ajustar_tamanio.setCommand(mfc);
+            ajustar_tamanio.setCommand(CommandFactory.buildCommand(CommandFactory.RESIZE, this));
             ajustar_tamanio.setEnabled(false);
             reset = new CommandMenuItem();
             reset.setLabel("Resetear");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.RESET);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            reset.setCommand(mfc);
+            reset.setCommand(CommandFactory.buildCommand(CommandFactory.RESET, this));
             reset.setEnabled(false);
             grayScale = new CommandCheckboxMenuItem();
             grayScale.setLabel("Escala de Grises");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.GRAYSCALE_FILTER);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            grayScale.setCommand(mfc);
+            grayScale.setCommand(CommandFactory.buildCommand(CommandFactory.GRAYSCALE_FILTER, this));
             grayScale.setEnabled(false);
             herramientas = new Menu("Herramientas");
             herramientas.add(ajustar_tamanio);
@@ -106,38 +102,51 @@ public class MyFrame extends Frame{
 
             invertir = new CommandCheckboxMenuItem();
             invertir.setLabel("Invertir");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.INVERSION_FILTER);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            invertir.setCommand(mfc);
+            invertir.setCommand(CommandFactory.buildCommand(CommandFactory.INVERSION_FILTER, this));
             contraste = new CommandCheckboxMenuItem();
             contraste.setLabel("Contraste");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(CommandFactory.CONTRAST_FILTER);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            contraste.setCommand(mfc);
+            contraste.setCommand(CommandFactory.buildCommand(CommandFactory.CONTRAST_FILTER, this));
             blur = new CommandCheckboxMenuItem();
             blur.setLabel("Blur");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(MasksEnum.BLUR);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            blur.setCommand(mfc);
+            blur.setCommand(CommandFactory.buildCommand(MasksEnum.BLUR, this));
             sharpen = new CommandCheckboxMenuItem();
             sharpen.setLabel("Sharpen");
-            mfc = (MyFrameCommand)CommandFactory.getCommand(MasksEnum.SHARPEN);
-            mfc.setFrame(this);
-            mfc.setMenuHandler(handler);
-            sharpen.setCommand(mfc);
+            sharpen.setCommand(CommandFactory.buildCommand(MasksEnum.SHARPEN, this));
+            lowpass = new CommandMenuItem();
+            lowpass.setLabel("Filtro pasa bajos");
+            lowpass.setCommand(CommandFactory.buildCommand(MasksEnum.LOW_PASS, this));
+            smooth = new CommandMenuItem();
+            smooth.setLabel("Smooth");
+            smooth.setCommand(CommandFactory.buildCommand(MasksEnum.SMOOTH, this));
+            midpass = new CommandMenuItem();
+            midpass.setLabel("Filtro pasa medios");
+            midpass.setCommand(CommandFactory.buildCommand(MasksEnum.MID_PASS, this));
+            gaussLowpass = new CommandMenuItem();
+            gaussLowpass.setLabel("Pasa bajos Gaussiano");
+            gaussLowpass.setCommand(CommandFactory.buildCommand(MasksEnum.GAUSS_LOW_PASS, this));
+            laplacian = new CommandMenuItem();
+            laplacian.setLabel("Laplaciano");
+            laplacian.setCommand(CommandFactory.buildCommand(MasksEnum.LAPLACIAN, this));
+            prewitt = new CommandMenuItem();
+            prewitt.setLabel("Operador de Prewitt");
+            prewitt.setCommand(CommandFactory.buildCommand(
+                new MasksEnum[] {MasksEnum.PREWITT_1, MasksEnum.PREWITT_2}, this));
             filtros = new Menu("Filtros");
             filtros.add(invertir);
             filtros.add(contraste);
             filtros.add(blur);
             filtros.add(sharpen);
+            filtros.add(lowpass);
+            filtros.add(smooth);
+            filtros.add(midpass);
+            filtros.add(gaussLowpass);
+            filtros.add(laplacian);
+            filtros.add(prewitt);
             herramientas.add(filtros);
             filtros.setEnabled(false);
         } catch (CommandConstructionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
-            String cause = e.getCause() == null ? "" : ("Causa" + e.getCause().toString());
+            String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
             JOptionPane.showMessageDialog(
                     this, command + "\n" + cause,
                     "Error al construir Command",
@@ -161,13 +170,45 @@ public class MyFrame extends Frame{
 		contraste.addItemListener(handler);
 		blur.addItemListener(handler);
 		sharpen.addItemListener(handler);
+        lowpass.addActionListener(handler);
+        smooth.addActionListener(handler);
+        midpass.addActionListener(handler);
+        gaussLowpass.addActionListener(handler);
+        laplacian.addActionListener(handler);
+        prewitt.addActionListener(handler);
+
+        processingMIs.add(grayScale);
+        processingMIs.add(invertir);
+        processingMIs.add(contraste);
+        processingMIs.add(sharpen);
+        processingMIs.add(blur);
+        processingMIs.add(reset);
+        processingMIs.add(ajustar_tamanio);
+        processingMIs.add(lowpass);
+        processingMIs.add(smooth);
+        processingMIs.add(midpass);
+        processingMIs.add(gaussLowpass);
+        processingMIs.add(laplacian);
+        processingMIs.add(prewitt);
 		
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();
 		// Registrar para recibir eventos
 		addWindowListener(adapter);				
 	}
-	
+
+    public void enableProcessing() {
+        for (MenuItem mi: processingMIs)
+            mi.setEnabled(true);
+        filtros.setEnabled(true);
+    }
+
+    public void disableProcessing() {
+        for (MenuItem mi: processingMIs)
+            mi.setEnabled(false);
+        filtros.setEnabled(false);
+    }
+
 	public int getAncho(){
 		return ancho;
 	}
@@ -188,18 +229,6 @@ public class MyFrame extends Frame{
 		return filtros;
 	}
 	
-	public MenuItem getResetButton(){
-		return reset;
-	}
-	
-	public MenuItem getAjustarTamanio(){
-		return ajustar_tamanio;
-	}
-	
-	public CheckboxMenuItem getGrayscale(){
-		return grayScale;
-	}
-	
 	public void setImageOrig(Image image){
 		this.imageOrig=image;
 	}
@@ -215,8 +244,16 @@ public class MyFrame extends Frame{
 	public Image getImage(){
 		return image;
 	}
-	
-	public void paint(Graphics g){
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public void paint(Graphics g){
 		
 		if(image!=null){
 			/*BufferedImage bi = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -226,9 +263,9 @@ public class MyFrame extends Frame{
 			else
 				g2d.drawImage(image, 0, 0, ancho, alto, null);
 			g2d.dispose();*/
-			//Lo comentado es para hacer doble buffering, pero como no funciona bi�n
+			//Lo comentado es para hacer doble buffering, pero como no funciona bien
 			//o lo estoy aplicando incorrectamente, lo dejo sin este feature
-			//Para aplicar doble buffering tambi�n hay que cambiar en el if de abajo "image por bi"
+			//Para aplicar doble buffering tambien hay que cambiar en el if de abajo "image por bi"
 			if(ancho==0 || alto==0)
 				g.drawImage(image, anchoIzquierdo, anchoMenu, null);
 			else
@@ -236,10 +273,6 @@ public class MyFrame extends Frame{
 		}		
 		
 	}
-
-    /*public void update(Graphics g){
-         paint(g);
-     }*/
 		
 	class MyWindowAdapter extends WindowAdapter {			
 		public void windowClosing(WindowEvent we){
