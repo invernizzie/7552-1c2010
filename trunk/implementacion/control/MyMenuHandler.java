@@ -22,8 +22,6 @@ import model.filters.*;
 public class MyMenuHandler implements ActionListener, ItemListener{
 
 	private MyFrame myframe;
-    // TODO Pertenece a esta clase??
-	private String ruta;
 	
 	public MyMenuHandler(MyFrame f){
 		myframe=f;
@@ -41,19 +39,12 @@ public class MyMenuHandler implements ActionListener, ItemListener{
             component.getCommand().execute();
         } catch (CommandExecutionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
-            String cause = e.getCause() == null ? "" : ("Causa" + e.getCause().toString());
+            String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
             JOptionPane.showMessageDialog(
                     myframe, command + "\n" + cause,
                     "Error al ejecutar Command",
                     JOptionPane.ERROR_MESSAGE);
         }
-	}
-	
-    public void setMenuFiltros(boolean habilitar){
-		Menu filtros = myframe.getMenuFiltos();
-		filtros.setEnabled(habilitar);
-		for(int i=0;i<filtros.getItemCount();i++)
-			((CheckboxMenuItem)filtros.getItem(i)).setState(!habilitar);
 	}
 	
 	//Gestion de eventos de botones "checkbox"
@@ -71,7 +62,7 @@ public class MyMenuHandler implements ActionListener, ItemListener{
             component.getCommand().execute();
         } catch (CommandExecutionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
-            String cause = e.getCause() == null ? "" : ("Causa" + e.getCause().toString());
+            String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
             JOptionPane.showMessageDialog(
                     myframe, command + "\n" + cause,
                     "Error al ejecutar Command",
@@ -116,12 +107,4 @@ public class MyMenuHandler implements ActionListener, ItemListener{
 		myframe.setImage(img);
 		myframe.repaint();*/
 	}
-
-    public String getRuta() {
-        return ruta;
-    }
-
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
-    }
 }

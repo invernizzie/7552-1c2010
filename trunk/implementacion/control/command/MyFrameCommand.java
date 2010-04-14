@@ -11,10 +11,9 @@ import view.components.MyFrame;
 public abstract class MyFrameCommand implements Command {
 
     MyFrame frame;
-    MyMenuHandler menuHandler;
 
     protected void testExecute() throws CommandExecutionException {
-        if ((frame == null) || (menuHandler == null))
+        if (frame == null)
             throw new CommandExecutionException(this);
     }
     
@@ -24,13 +23,5 @@ public abstract class MyFrameCommand implements Command {
 
     public void setFrame(MyFrame frame) {
         this.frame = frame;
-    }
-
-    public MyMenuHandler getMenuHandler() {
-        return menuHandler;
-    }
-
-    public void setMenuHandler(MyMenuHandler menuHandler) {
-        this.menuHandler = menuHandler;
     }
 }

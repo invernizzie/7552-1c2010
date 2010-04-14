@@ -74,7 +74,8 @@ public class NormalizedMask implements Mask {
         }
 
         private int clamp(int c) {
-            // TODO Implementar una normalizacion distinta
+            /* TODO Implementar una normalizacion con cambio de
+             * escala para filtros Laplaciano, Gaussiano y de Prewitt */
             return ( c > 255 ? 255 : (c < 0 ? 0 : c));
         }
     }
