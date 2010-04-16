@@ -5,16 +5,13 @@ import java.awt.Image;
 import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.MenuBar;
-import java.awt.CheckboxMenuItem;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 import control.MasksEnum;
 import control.MyMenuHandler;
-import control.command.Command;
 import control.command.CommandFactory;
-import control.command.MyFrameCommand;
 import control.command.exceptions.CommandConstructionException;
 
 import javax.swing.*;
