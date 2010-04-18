@@ -3,6 +3,7 @@ package control.command;
 import control.Constants;
 import control.MasksEnum;
 import control.command.exceptions.CommandConstructionException;
+import model.filters.impl.Binarize;
 import model.filters.impl.Contrast;
 import model.filters.impl.Grayscale;
 import model.filters.impl.Invert;
@@ -27,6 +28,7 @@ public class CommandFactory {
     public static final String INVERSION_FILTER = "INVERSION_FILTER_COMMAND";
     public static final String CONTRAST_FILTER = "CONTRAST_FILTER_COMMAND";
     public static final String GRAYSCALE_FILTER = "GRAYSCALE_FILTER_COMMAND";
+    public static final String BINARIZE_FILTER = "BINARIZE_FILTER_COMMAND";
 
 
     public static Command getCommand(String commandName) throws CommandConstructionException {
@@ -61,7 +63,10 @@ public class CommandFactory {
 
         if (GRAYSCALE_FILTER.equals(commandName))
             return new FilterCommand(new Grayscale());
-        
+
+        if (BINARIZE_FILTER.equals(commandName))
+            return new FilterCommand(new Binarize());
+
         return null;
     }
 
