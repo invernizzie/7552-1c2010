@@ -33,6 +33,7 @@ public class MyFrame extends Frame{
 	private CommandMenuItem
             reset,
             ajustar_tamanio,
+            binarizar,
             lowpass,
             smooth,
             midpass,
@@ -84,6 +85,10 @@ public class MyFrame extends Frame{
             ajustar_tamanio.setLabel("Ajustar Tamaño...");
             ajustar_tamanio.setCommand(CommandFactory.buildCommand(CommandFactory.RESIZE, this));
             ajustar_tamanio.setEnabled(false);
+            binarizar = new CommandMenuItem();
+            binarizar.setLabel("Binarizar");
+            binarizar.setCommand(CommandFactory.buildCommand(CommandFactory.BINARIZE_FILTER, this));
+            binarizar.setEnabled(false);
             reset = new CommandMenuItem();
             reset.setLabel("Resetear");
             reset.setCommand(CommandFactory.buildCommand(CommandFactory.RESET, this));
@@ -96,6 +101,7 @@ public class MyFrame extends Frame{
             herramientas.add(ajustar_tamanio);
             herramientas.add(reset);
             herramientas.add(grayScale);
+            herramientas.add(binarizar);
 
             invertir = new CommandCheckboxMenuItem();
             invertir.setLabel("Invertir");
@@ -163,6 +169,7 @@ public class MyFrame extends Frame{
 		reset.addActionListener(handler);
 		ajustar_tamanio.addActionListener(handler);
 		grayScale.addItemListener(handler);
+        binarizar.addActionListener(handler);
 		invertir.addItemListener(handler);
 		contraste.addItemListener(handler);
 		blur.addItemListener(handler);
@@ -181,6 +188,7 @@ public class MyFrame extends Frame{
         processingMIs.add(blur);
         processingMIs.add(reset);
         processingMIs.add(ajustar_tamanio);
+        processingMIs.add(binarizar);
         processingMIs.add(lowpass);
         processingMIs.add(smooth);
         processingMIs.add(midpass);
