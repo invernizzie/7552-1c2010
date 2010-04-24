@@ -1,8 +1,7 @@
 package control.command;
 
-import control.MyMenuHandler;
-import control.command.exceptions.CommandExecutionException;
 import view.components.MyFrame;
+import control.command.exceptions.CommandExecutionException;
 
 /**
  * @author Esteban I. Invernizzi

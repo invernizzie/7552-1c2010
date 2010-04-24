@@ -39,7 +39,8 @@ public class MyFrame extends Frame{
             midpass,
             gaussLowpass,
             laplacian,
-            prewitt;
+            prewitt,
+            secuenciaFiltros;
     private java.util.List<MenuItem> processingMIs = new ArrayList<MenuItem>();
 	private int ancho, alto;
 	private final static int anchoMenu = 50;
@@ -97,6 +98,7 @@ public class MyFrame extends Frame{
             grayScale.setLabel("Escala de Grises");
             grayScale.setCommand(CommandFactory.buildCommand(CommandFactory.GRAYSCALE_FILTER, this));
             grayScale.setEnabled(false);
+            
             herramientas = new Menu("Herramientas");
             herramientas.add(ajustar_tamanio);
             herramientas.add(reset);
@@ -147,6 +149,14 @@ public class MyFrame extends Frame{
             filtros.add(prewitt);
             herramientas.add(filtros);
             filtros.setEnabled(false);
+            
+            secuenciaFiltros = new CommandMenuItem();
+            secuenciaFiltros.setLabel("Secuencia de Filtros");
+            secuenciaFiltros.setCommand(CommandFactory.buildCommand(CommandFactory.FILTER_SELECTOR, this));
+            secuenciaFiltros.setEnabled(false);
+            herramientas.add(secuenciaFiltros);
+            
+            
         } catch (CommandConstructionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
             String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
@@ -180,6 +190,7 @@ public class MyFrame extends Frame{
         gaussLowpass.addActionListener(handler);
         laplacian.addActionListener(handler);
         prewitt.addActionListener(handler);
+        secuenciaFiltros.addActionListener(handler);
 
         processingMIs.add(grayScale);
         processingMIs.add(invertir);
@@ -195,6 +206,7 @@ public class MyFrame extends Frame{
         processingMIs.add(gaussLowpass);
         processingMIs.add(laplacian);
         processingMIs.add(prewitt);
+        processingMIs.add(secuenciaFiltros);
 		
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();

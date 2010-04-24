@@ -1,23 +1,16 @@
 package control;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import java.awt.CheckboxMenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import control.command.CommandFactory;
-import control.command.exceptions.CommandExecutionException;
-import model.filters.impl.Contrast;
-import model.filters.impl.Grayscale;
-import model.filters.impl.Invert;
-import control.Constants;
-import control.MasksEnum;
+import javax.swing.JOptionPane;
+
 import view.components.CommandComponent;
 import view.components.MyFrame;
-import control.MyDialogHandler;
-import model.filters.*;
+import control.command.exceptions.CommandExecutionException;
 
 public class MyMenuHandler implements ActionListener, ItemListener{
 

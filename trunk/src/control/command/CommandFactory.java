@@ -3,12 +3,14 @@ package control.command;
 import control.Constants;
 import control.MasksEnum;
 import control.command.exceptions.CommandConstructionException;
+import model.filters.Filter;
 import model.filters.impl.Binarize;
 import model.filters.impl.Contrast;
 import model.filters.impl.Grayscale;
 import model.filters.impl.Invert;
 import view.components.MyFrame;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 /**
@@ -29,6 +31,8 @@ public class CommandFactory {
     public static final String CONTRAST_FILTER = "CONTRAST_FILTER_COMMAND";
     public static final String GRAYSCALE_FILTER = "GRAYSCALE_FILTER_COMMAND";
     public static final String BINARIZE_FILTER = "BINARIZE_FILTER_COMMAND";
+    public static final String FILTER_SELECTOR = "FILTER_SELECTOR_COMMAND";
+    public static final String FILTER_LIST = "FILTER_LIST_COMMAND";
 
 
     public static Command getCommand(String commandName) throws CommandConstructionException {
@@ -66,6 +70,12 @@ public class CommandFactory {
 
         if (BINARIZE_FILTER.equals(commandName))
             return new FilterCommand(new Binarize());
+        
+        if (FILTER_SELECTOR.equals(commandName))
+            return new CommandFilterSelector();
+        
+        if (FILTER_LIST.equals(commandName))
+            return new FilterListCommand();
 
         return null;
     }
@@ -112,7 +122,7 @@ public class CommandFactory {
         return mfc;
     }
 
-     public static MyFrameCommand buildCommand(MasksEnum[] masks, MyFrame frame) throws CommandConstructionException {
+    public static MyFrameCommand buildCommand(MasksEnum[] masks, MyFrame frame) throws CommandConstructionException {
 
         Command command = CommandFactory.getCommand(masks);
         if (!(command instanceof MyFrameCommand))
@@ -122,4 +132,25 @@ public class CommandFactory {
         mfc.setFrame(frame);
         return mfc;
     }
+     
+    
+    public static MyFrameCommand buildCommand(String[] filterNames, MyFrame frame) throws CommandConstructionException {
+
+    	FilterListCommand command = (FilterListCommand)CommandFactory.getCommand(FILTER_LIST);
+        if (!(command instanceof MyFrameCommand))
+            throw new CommandConstructionException(command);
+
+        Filter[] filters = new Filter[filterNames.length];
+
+        for (int i = 0; i < filterNames.length; i++) {
+			String filterName = filterNames[i];
+			filters[i] = command.getFilterMap().getFilterCommand(filterName).getFilter();
+        }
+        command.setFilters(filters);
+        MyFrameCommand mfc = (MyFrameCommand)command;
+        mfc.setFrame(frame);
+        return mfc;
+
+    }
+
 }
