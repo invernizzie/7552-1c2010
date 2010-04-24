@@ -34,9 +34,10 @@ public class MyDialogHandler implements ActionListener {
 			myframe.setAlto(alto);
 			myframe.repaint();
 			d.dispose();
-		}else if(arg.equals("Cancelar")){
+		}
+		else if(arg.equals("Cancelar")){
 			d.dispose();
-		}		
+		}
 	}
 
 }
