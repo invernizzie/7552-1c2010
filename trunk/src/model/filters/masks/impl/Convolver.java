@@ -88,4 +88,11 @@ public abstract class Convolver implements ImageConsumer, Filter {
 		try { wait(); } catch (Exception e) { };
 	}
 
+    protected int getImgPixel(int x, int y) {
+        return imgpixels[ y*width + x ];
+    }
+
+    protected void setNewImgPixel(int x, int y, int newp) {
+        newimgpixels[ y*width + x ] = newp;
+    }
 }
