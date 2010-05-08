@@ -12,6 +12,8 @@ import java.awt.*;
  */
 public class ClampingMask implements Mask {
 
+    // TODO Permitir el uso de mascaras de distinto tamanio
+
     private double[][] coefs;
     private int width, height;
     int imgpixels[], newimgpixels[];
@@ -56,7 +58,7 @@ public class ClampingMask implements Mask {
 
                     for(int k=-1; k<=1; k++) {
                         for(int j=-1; j<=1; j++){
-                            int rgb = imgpixels[ (y+k)*width + (x+j) ];
+                            int rgb = getImgPixel(x+j, y+k);
                             int r = (rgb >> 16) & 0xff;
                             int g = (rgb >> 8) & 0xff;
                             int b = rgb & 0xff;
@@ -66,8 +68,8 @@ public class ClampingMask implements Mask {
                             newB += b * coefs[j+1][k+1];
                         }
                     }
-                    newimgpixels[y*width+x] = (0xff000000 |
-                    clamp(newR) << 16 | clamp(newG) << 8 | clamp(newB));
+                    setNewImgPixel(x, y,
+                            (0xff000000 | clamp(newR) << 16 | clamp(newG) << 8 | clamp(newB)));
                 }
             }
         }
