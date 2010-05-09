@@ -1,13 +1,9 @@
 package control.command;
 
-import control.Constants;
-import control.command.exceptions.CommandConstructionException;
-import control.command.exceptions.CommandExecutionException;
-import model.filters.Filter;
-import view.components.MyFrame;
+import java.awt.Image;
 
-import java.awt.*;
-import java.util.NoSuchElementException;
+import model.filters.Filter;
+import control.command.exceptions.CommandExecutionException;
 
 /**
  * @author Esteban I. Invernizzi
@@ -24,9 +20,7 @@ public class FilterCommand extends MyFrameCommand {
     }
 
     public void execute() throws CommandExecutionException {
-
         testExecute();
-
         Image img = filter.filter(frame.getImage());
         frame.setImage(img);
         frame.repaint();

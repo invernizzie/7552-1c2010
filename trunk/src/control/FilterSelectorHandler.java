@@ -50,7 +50,6 @@ public class FilterSelectorHandler implements ActionListener {
 			try {
 				String[] filterNames = listaSeleccionados.getItems();
 				MyFrameCommand buildCommand = CommandFactory.buildCommand(filterNames, frame);
-				
 				buildCommand.execute();
 				
 			} catch (CommandConstructionException e) {
@@ -64,6 +63,16 @@ public class FilterSelectorHandler implements ActionListener {
 		else if(arg.equals("cancelar")){
 			d.dispose();
 		}
+	}
+
+	
+	
+	public List getListaDisponibles() {
+		return listaDisponibles;
+	}
+
+	public List getListaSeleccionados() {
+		return listaSeleccionados;
 	}
 
 	private void closeAll(CommandException e) {
