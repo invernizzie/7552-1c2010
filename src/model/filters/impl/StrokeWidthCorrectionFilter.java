@@ -9,6 +9,7 @@ import java.awt.image.MemoryImageSource;
  * @author Esteban I. Invernizzi (invernizzie@gmail.com)
  * Date: 08/05/2010
  */
+@Deprecated
 public class StrokeWidthCorrectionFilter extends Convolver {
 
     private int threshold = 220;
@@ -32,7 +33,7 @@ public class StrokeWidthCorrectionFilter extends Convolver {
                         if (grayValue(getImgPixel(x*5+j, y*5+k)) < threshold)
                             belowThreshold = true;
 
-                newimgpixels[ y*width/5+x ] = belowThreshold ? 0xff000000 : 0xffffffff;
+                setNewImgPixel(x, y/5, belowThreshold ? 0xff000000 : 0xffffffff);
             }
     }
 
@@ -45,7 +46,6 @@ public class StrokeWidthCorrectionFilter extends Convolver {
 
     public Image filter(Image in) {
 		in.getSource().startProduction(this);
-		//waitForImage();
 		newimgpixels = new int[(width/5)*(height/5)];
 
 		try {
