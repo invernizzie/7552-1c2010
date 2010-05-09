@@ -22,8 +22,9 @@ public class FilterListCommand extends MyFrameCommand {
     }
 
     public void execute() throws CommandExecutionException {
-
         testExecute();
+        frame.setImage(frame.getImageOrig());
+        frame.repaint();
         for (int i = 0; i < filters.length; i++) {
         	Filter filter = filters[i];
         	Image img = filter.filter(frame.getImage());

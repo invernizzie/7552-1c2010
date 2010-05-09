@@ -14,6 +14,8 @@ import control.command.exceptions.CommandExecutionException;
 
 public class CommandFilterSelector extends MyFrameCommand {
 
+	private FilterSelectorHandler handler;
+	
 	@Override
 	public void execute() throws CommandExecutionException {
         Dialog d = new Dialog(frame, "Secuencia de filtros", true);
@@ -21,24 +23,20 @@ public class CommandFilterSelector extends MyFrameCommand {
         d.setLocation(new Point(500,300));
         d.setLayout(new FlowLayout());
 
-        List listaDisponibles = new List(10, false);
-        List listaSeleccionados = new List(10, false);
-
-        MasksEnum[] mascaras = MasksEnum.values();
-        for (int i = 0; i < mascaras.length; i++) {
-        	MasksEnum mascara = mascaras[i];
-        	mascara.getNombre();
-        	listaDisponibles.add(mascara.getNombre(), i);
+        List listaDisponibles;
+        List listaSeleccionados;
+        if(handler==null){
+        	listaSeleccionados = new List(10, false);
+        	listaDisponibles = new List(10, false);
+        	this.completarListaDisponibles(listaDisponibles);
         }
-        
-        FilterEnum[] filtros = FilterEnum.values();
-        for (int i = 0; i < filtros.length; i++) {
-        	FilterEnum filtro = filtros[i];
-        	filtro.getNombre();
-        	listaDisponibles.add(filtro.getNombre(), i);
+        else{
+        	listaSeleccionados = handler.getListaSeleccionados();
+        	listaDisponibles = handler.getListaDisponibles();
         }
 
-        FilterSelectorHandler handler = new FilterSelectorHandler(listaDisponibles, listaSeleccionados, d, frame);
+
+        handler = new FilterSelectorHandler(listaDisponibles, listaSeleccionados, d, frame);
         Button btnIzquierda = new Button("<<");
         Button btnDerecha = new Button(">>");
         Button btnAplicar = new Button("Aplicar"); 
@@ -60,9 +58,25 @@ public class CommandFilterSelector extends MyFrameCommand {
         d.add(listaSeleccionados);
         d.add(btnAplicar);
         d.add(btnCancelar);
-
         
         d.setVisible(true);
+	}
+
+	
+	private void completarListaDisponibles(List listaDisponibles) {
+		MasksEnum[] mascaras = MasksEnum.values();
+		for (int i = 0; i < mascaras.length; i++) {
+			MasksEnum mascara = mascaras[i];
+			mascara.getNombre();
+			listaDisponibles.add(mascara.getNombre(), i);
+		}
+		
+		FilterEnum[] filtros = FilterEnum.values();
+		for (int i = 0; i < filtros.length; i++) {
+			FilterEnum filtro = filtros[i];
+			filtro.getNombre();
+			listaDisponibles.add(filtro.getNombre(), i);
+		}
 	}
 
 
