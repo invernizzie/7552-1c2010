@@ -21,8 +21,7 @@ public class FilterListCommand extends MyFrameCommand {
     	filterMap = new FilterMap();
     }
 
-    public void execute() throws CommandExecutionException {
-        testExecute();
+    protected void doExecute() throws CommandExecutionException {
         frame.setImage(frame.getImageOrig());
         frame.repaint();
         for (int i = 0; i < filters.length; i++) {

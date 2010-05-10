@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class CommandResize extends MyFrameCommand {
 
-    public void execute() throws CommandExecutionException {
+    protected void doExecute() throws CommandExecutionException {
         Dialog d = new Dialog(frame, "Ajustar Tamaño", true);
         d.setSize(new Dimension(250,100));
         d.setLocation(new Point(500,300));

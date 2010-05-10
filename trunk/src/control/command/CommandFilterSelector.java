@@ -17,7 +17,7 @@ public class CommandFilterSelector extends MyFrameCommand {
 	private FilterSelectorHandler handler;
 	
 	@Override
-	public void execute() throws CommandExecutionException {
+	protected void doExecute() throws CommandExecutionException {
         Dialog d = new Dialog(frame, "Secuencia de filtros", true);
         d.setSize(new Dimension(380,240));
         d.setLocation(new Point(500,300));

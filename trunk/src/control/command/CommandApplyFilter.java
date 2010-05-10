@@ -9,18 +9,17 @@ import control.command.exceptions.CommandExecutionException;
  * @author Esteban I. Invernizzi
  * @created 13/04/2010
  */
-public class FilterCommand extends MyFrameCommand {
+public class CommandApplyFilter extends MyFrameCommand {
 
     Filter filter;
 
-    protected FilterCommand() {}
+    protected CommandApplyFilter() {}
 
-    public FilterCommand(Filter filter) {
+    public CommandApplyFilter(Filter filter) {
         this.filter = filter;
     }
 
-    public void execute() throws CommandExecutionException {
-        testExecute();
+    protected void doExecute() throws CommandExecutionException {
         Image img = filter.filter(frame.getImage());
         frame.setImage(img);
         frame.repaint();

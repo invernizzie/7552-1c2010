@@ -35,7 +35,7 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
     public List<Stroke> generateStrokes() {
         detectPoints();
         distributePoints();
-        return Collections.unmodifiableList(strokes);
+        return (strokes == null) ? null : Collections.unmodifiableList(strokes);
     }
 
     private void detectPoints() {
@@ -148,7 +148,7 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
                                 aboveThreshold = true;
 
                     if (belowThreshold && aboveThreshold)
-                        points.add(new Point(x, y));
+                        points.add(new Point(x*5, y*5));
                 }
         }
 

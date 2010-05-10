@@ -8,7 +8,7 @@ import control.command.exceptions.CommandExecutionException;
  */
 public class CommandExit extends MyFrameCommand {
 
-    public void execute() throws CommandExecutionException {
+    public void doExecute() throws CommandExecutionException {
         frame.dispose();
         System.exit(0);
     }

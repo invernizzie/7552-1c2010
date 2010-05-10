@@ -5,6 +5,7 @@ import model.filters.masks.impl.InvalidMaskException;
 import model.filters.impl.MaskFilter;
 import model.filters.masks.Mask;
 import model.filters.masks.impl.ClampingMask;
+import model.filters.masks.impl.NormalizedMask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,16 +57,16 @@ public class Constants {
                 {-2.0,  4.0, -2.0},
                 { 1.0, -2.0,  1.0}}
             ));
-        masks.put(MasksEnum.PREWITT_1, ClampingMask.create(new double[][] {
+        masks.put(MasksEnum.PREWITT_1, NormalizedMask.create(new double[][] {
                 { 1.0,  1.0,  1.0},
                 { 0.0,  0.0,  0.0},
-                {-1.0, -1.0, -1.0}}
-            ));
-        masks.put(MasksEnum.PREWITT_2, ClampingMask.create(new double[][] {
+                {-1.0, -1.0, -1.0}},
+            127, 0.1));
+        masks.put(MasksEnum.PREWITT_2, NormalizedMask.create(new double[][] {
                 {-1.0,  0.0,  1.0},
                 {-1.0,  0.0,  1.0},
-                {-1.0,  0.0,  1.0}}
-            ));
+                {-1.0,  0.0,  1.0}},
+            127, 0.1));
     } catch (InvalidMaskException e) {}
     }
 

@@ -18,9 +18,7 @@ import java.io.IOException;
 public class CommandFileOpen extends MyFrameCommand {
 
 
-    public void execute() throws CommandExecutionException {
-        testExecute();
-
+    protected void doExecute() throws CommandExecutionException {
         FileDialog fd = new FileDialog(frame,"Abrir",FileDialog.LOAD);
 			fd.setFile("*.jpg");
 			fd.setLocation(new Point(350,120));
@@ -31,6 +29,7 @@ public class CommandFileOpen extends MyFrameCommand {
 				    img = ImageIO.read(new File(fd.getDirectory()+fd.getFile()));
 				    frame.setRuta(fd.getDirectory() + fd.getFile());
 				    frame.setImage(img);
+                    frame.setStrokes(null);
 				    frame.setImageOrig(img);
 				    frame.enableProcessing();
 				    frame.repaint();

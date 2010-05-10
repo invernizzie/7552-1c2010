@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class CommandFileSave extends MyFrameCommand {
 
-    public void execute() throws CommandExecutionException {
+    protected void doExecute() throws CommandExecutionException {
         if(frame.getRuta() != null){
 				try{
 					BufferedImage bi = new BufferedImage(

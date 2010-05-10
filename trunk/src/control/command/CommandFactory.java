@@ -10,7 +10,6 @@ import model.filters.impl.Grayscale;
 import model.filters.impl.Invert;
 import view.components.MyFrame;
 
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 /**
@@ -33,7 +32,7 @@ public class CommandFactory {
     public static final String BINARIZE_FILTER = "BINARIZE_FILTER_COMMAND";
     public static final String FILTER_SELECTOR = "FILTER_SELECTOR_COMMAND";
     public static final String FILTER_LIST = "FILTER_LIST_COMMAND";
-
+    public static final String DETECT_EDGE = "DETECT_EDGE_COMMAND";
 
     public static Command getCommand(String commandName) throws CommandConstructionException {
 
@@ -60,16 +59,16 @@ public class CommandFactory {
             return new CommandResize();
 
         if (INVERSION_FILTER.equals(commandName))
-            return new FilterCommand(new Invert());
+            return new CommandApplyFilter(new Invert());
 
         if (CONTRAST_FILTER.equals(commandName))
-            return new FilterCommand(new Contrast());
+            return new CommandApplyFilter(new Contrast());
 
         if (GRAYSCALE_FILTER.equals(commandName))
-            return new FilterCommand(new Grayscale());
+            return new CommandApplyFilter(new Grayscale());
 
         if (BINARIZE_FILTER.equals(commandName))
-            return new FilterCommand(new Binarize());
+            return new CommandApplyFilter(new Binarize());
         
         if (FILTER_SELECTOR.equals(commandName))
             return new CommandFilterSelector();
@@ -77,12 +76,16 @@ public class CommandFactory {
         if (FILTER_LIST.equals(commandName))
             return new FilterListCommand();
 
+        if (DETECT_EDGE.equals(commandName))
+            return new CommandDetectEdges();
+
+        // TODO Arrojar excepcion
         return null;
     }
 
     public static Command getCommand(MasksEnum mask) throws CommandConstructionException {
         try {
-            return new FilterCommand(Constants.getMaskFilter(mask));
+            return new CommandApplyFilter(Constants.getMaskFilter(mask));
         } catch (NoSuchElementException e) {
             throw new CommandConstructionException(e, null);
         }
@@ -90,7 +93,7 @@ public class CommandFactory {
 
     public static Command getCommand(MasksEnum[] masks) throws CommandConstructionException {
         try {
-            return new FilterCommand(Constants.getMaskFilter(masks));
+            return new CommandApplyFilter(Constants.getMaskFilter(masks));
         } catch (NoSuchElementException e) {
             throw new CommandConstructionException(e, null);
         }
