@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class CommandFileSaveAs extends CommandFileSave {
 
-    public void execute() throws CommandExecutionException {
+    protected void doExecute() throws CommandExecutionException {
         FileDialog fd = new FileDialog(frame, "Guardar Como", FileDialog.SAVE);
         fd.setFile("*.jpg");
         fd.setLocation(new Point(350,120));

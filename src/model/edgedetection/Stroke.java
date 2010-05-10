@@ -13,7 +13,7 @@ public class Stroke {
     Deque<Point> points = new ArrayDeque<Point>();
 
     /**
-	 * Agrega el punto al extremo más cercano del trazo.
+	 * Agrega el punto al extremo mas cercano del trazo.
 	 *
 	 * @param point
 	 */
@@ -64,4 +64,37 @@ public class Stroke {
         // TODO
         return distanceTo(point);
 	}
+
+    /**
+     * Dibuja el trazo en un Graphics, como tramos rectos entre punto y punto.
+     * @param graphics
+     * @param color
+     */
+    public void paint(Graphics graphics, Color color) {
+        graphics.setColor(color);
+        paintAsLines(graphics);
+        paintAsDots(graphics);
+    }
+
+    private void paintAsLines(Graphics graphics) {
+        Iterator<Point> pointIterator = points.iterator();
+        Point firstPoint = pointIterator.next(), secondPoint;
+        while (pointIterator.hasNext()) {
+            secondPoint = pointIterator.next();
+            graphics.drawLine(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y);
+            firstPoint = secondPoint;
+        }
+        if (points.size() > 1) {
+            secondPoint = points.getFirst();
+            graphics.drawLine(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y);
+        }
+    }
+
+    private void paintAsDots(Graphics graphics) {
+        Iterator<Point> pointIterator = points.iterator();
+        while (pointIterator.hasNext()) {
+            Point point = pointIterator.next();
+            graphics.fillOval(point.x-2, point.y-2, 4, 4);
+        }
+    }
 }

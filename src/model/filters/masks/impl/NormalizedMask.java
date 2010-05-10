@@ -14,14 +14,17 @@ public class NormalizedMask implements Mask {
     // TODO Solucionar la repeticion de codigo de ClampingMask
 
     private double[][] coefs;
-    private int width, height;
+    private int width, height, offset;
+    private double factor;
     int imgpixels[], newimgpixels[];
 
-    public static NormalizedMask create(double[][] coefs) throws InvalidMaskException {
+    public static NormalizedMask create(double[][] coefs, int offset, double factor) throws InvalidMaskException {
 
         testCreate(coefs);
         NormalizedMask result = new NormalizedMask();
         result.coefs = coefs;
+        result.offset = offset;
+        result.factor = factor;
         return result;
     }
 
@@ -76,7 +79,14 @@ public class NormalizedMask implements Mask {
         private int clamp(int c) {
             /* TODO Implementar una normalizacion con cambio de
              * escala para filtros Laplaciano, Gaussiano y de Prewitt */
-            return ( c > 255 ? 255 : (c < 0 ? 0 : c));
+            if (c > 255)
+                return (c * factor) > 255 ? 255 : ((int)(c * factor)); 
+            if (c + offset > 255)
+                if (c * factor > 255)
+                    return 255;
+                else
+                    return (int)(c * factor);
+            return c + offset;
         }
     }
 

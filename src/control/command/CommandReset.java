@@ -8,7 +8,7 @@ import control.command.exceptions.CommandExecutionException;
  */
 public class CommandReset extends MyFrameCommand {
 
-    public void execute() throws CommandExecutionException {
+    protected void doExecute() throws CommandExecutionException {
         frame.setImage(frame.getImageOrig());
         frame.repaint();
     }

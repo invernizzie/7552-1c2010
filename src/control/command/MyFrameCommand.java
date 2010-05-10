@@ -11,6 +11,13 @@ public abstract class MyFrameCommand implements Command {
 
     MyFrame frame;
 
+    public final void execute() throws CommandExecutionException {
+        testExecute();
+        doExecute();
+    }
+
+    protected abstract void doExecute() throws CommandExecutionException;
+
     protected void testExecute() throws CommandExecutionException {
         if (frame == null)
             throw new CommandExecutionException(this);

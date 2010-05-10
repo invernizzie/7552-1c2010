@@ -1,22 +1,18 @@
 package view.components;
 
-import java.awt.Frame;
-import java.awt.Image;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.MenuBar;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import control.MasksEnum;
 import control.MyMenuHandler;
 import control.command.CommandFactory;
 import control.command.exceptions.CommandConstructionException;
+import model.edgedetection.Stroke;
 
 import javax.swing.*;
 
-// Subclase de Frame
 @SuppressWarnings("serial")
 public class MyFrame extends Frame{
 	
@@ -44,18 +40,17 @@ public class MyFrame extends Frame{
             buscarContorno;
     private java.util.List<MenuItem> processingMIs = new ArrayList<MenuItem>();
 	private int ancho, alto;
-	private final static int anchoMenu = 50;
+	private final static int alturaMenu = 50;
 	private final static int anchoIzquierdo = 7;
+    private java.util.List<Stroke> strokes = null;
 	
 	public MyFrame(String title) {
 		super(title);
 		ancho=0;
 		alto=0;
 		imageOrig=null;
-		image=null;	
-        //Se crea un objeto para gestionar los eventos del menu
+		image=null;
 		MyMenuHandler handler = new MyMenuHandler(this);
-        // Se crea una barra de menus y se añade al frame
 		MenuBar mbar = new MenuBar();
         Menu herramientas = null;
         CommandMenuItem open = null, save = null, saveAs = null, exit = null;
@@ -157,11 +152,11 @@ public class MyFrame extends Frame{
             secuenciaFiltros.setEnabled(false);
             herramientas.add(secuenciaFiltros);
 
-            /*buscarContorno = new CommandMenuItem();
+            buscarContorno = new CommandMenuItem();
             buscarContorno.setLabel("Detectar contorno");
-            buscarContorno.setCommand(CommandFactory.getCommand(CommandFactory.DETECT_EDGE));
+            buscarContorno.setCommand(CommandFactory.buildCommand(CommandFactory.DETECT_EDGE, this));
             buscarContorno.setEnabled(false);
-            herramientas.add(buscarContorno);*/
+            herramientas.add(buscarContorno);
 
         } catch (CommandConstructionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
@@ -197,7 +192,7 @@ public class MyFrame extends Frame{
         laplacian.addActionListener(handler);
         prewitt.addActionListener(handler);
         secuenciaFiltros.addActionListener(handler);
-        //buscarContorno.addActionListener(handler);
+        buscarContorno.addActionListener(handler);
 
         processingMIs.add(grayScale);
         processingMIs.add(invertir);
@@ -214,7 +209,7 @@ public class MyFrame extends Frame{
         processingMIs.add(laplacian);
         processingMIs.add(prewitt);
         processingMIs.add(secuenciaFiltros);
-        //processingMIs.add(buscarContorno);
+        processingMIs.add(buscarContorno);
 		
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();
@@ -278,7 +273,15 @@ public class MyFrame extends Frame{
         this.ruta = ruta;
     }
 
-    public void paint(Graphics g){
+    public List<Stroke> getStrokes() {
+        return strokes;
+    }
+
+    public void setStrokes(List<Stroke> strokes) {
+        this.strokes = strokes;
+    }
+
+    public void paint(Graphics graphics){
 		
 		if(image!=null){
 			/*BufferedImage bi = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -291,12 +294,18 @@ public class MyFrame extends Frame{
 			//Lo comentado es para hacer doble buffering, pero como no funciona bien
 			//o lo estoy aplicando incorrectamente, lo dejo sin este feature
 			//Para aplicar doble buffering tambien hay que cambiar en el if de abajo "image por bi"
+
+            graphics.translate(anchoIzquierdo, alturaMenu);
 			if(ancho==0 || alto==0)
-				g.drawImage(image, anchoIzquierdo, anchoMenu, null);
+				graphics.drawImage(image, 0, 0, null);
 			else
-				g.drawImage(image, anchoIzquierdo, anchoMenu, ancho, alto, null);						
-		}		
-		
+				graphics.drawImage(image, 0, 0, ancho, alto, null);
+
+            graphics.translate(2, 2);
+            if (strokes != null)
+                for(Stroke stroke: strokes)
+                    stroke.paint(graphics, Color.RED);
+		}
 	}
 		
 	class MyWindowAdapter extends WindowAdapter {			
