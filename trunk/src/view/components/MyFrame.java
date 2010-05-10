@@ -40,7 +40,8 @@ public class MyFrame extends Frame{
             gaussLowpass,
             laplacian,
             prewitt,
-            secuenciaFiltros;
+            secuenciaFiltros,
+            buscarContorno;
     private java.util.List<MenuItem> processingMIs = new ArrayList<MenuItem>();
 	private int ancho, alto;
 	private final static int anchoMenu = 50;
@@ -155,8 +156,13 @@ public class MyFrame extends Frame{
             secuenciaFiltros.setCommand(CommandFactory.buildCommand(CommandFactory.FILTER_SELECTOR, this));
             secuenciaFiltros.setEnabled(false);
             herramientas.add(secuenciaFiltros);
-            
-            
+
+            /*buscarContorno = new CommandMenuItem();
+            buscarContorno.setLabel("Detectar contorno");
+            buscarContorno.setCommand(CommandFactory.getCommand(CommandFactory.DETECT_EDGE));
+            buscarContorno.setEnabled(false);
+            herramientas.add(buscarContorno);*/
+
         } catch (CommandConstructionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
             String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
@@ -191,6 +197,7 @@ public class MyFrame extends Frame{
         laplacian.addActionListener(handler);
         prewitt.addActionListener(handler);
         secuenciaFiltros.addActionListener(handler);
+        //buscarContorno.addActionListener(handler);
 
         processingMIs.add(grayScale);
         processingMIs.add(invertir);
@@ -207,6 +214,7 @@ public class MyFrame extends Frame{
         processingMIs.add(laplacian);
         processingMIs.add(prewitt);
         processingMIs.add(secuenciaFiltros);
+        //processingMIs.add(buscarContorno);
 		
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();
