@@ -34,7 +34,7 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
 
     public List<Stroke> generateStrokes() {
         detectPoints();
-        distributeInStrokes();
+        distributePoints();
         return Collections.unmodifiableList(strokes);
     }
 
@@ -45,7 +45,7 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
     /**
      * Distribuye en trazos el conjunto de puntos
      */
-    private void distributeInStrokes() {
+    private void distributePoints() {
         // TODO Dividir en metodos mas cohesivos
         Iterator<Point> pointIterator = points.iterator();
         if (!pointIterator.hasNext())

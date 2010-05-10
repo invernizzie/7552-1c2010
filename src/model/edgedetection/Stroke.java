@@ -1,6 +1,7 @@
 package model.edgedetection;
 
 import java.awt.*;
+import java.util.*;
 
 /**
  * @author Esteban I. Invernizzi (invernizzie@gmail.com)
@@ -9,6 +10,8 @@ import java.awt.*;
  */
 public class Stroke {
 
+    Deque<Point> points = new ArrayDeque<Point>();
+
     /**
 	 * Agrega el punto al extremo más cercano del trazo.
 	 *
@@ -16,12 +19,16 @@ public class Stroke {
 	 */
 	public void addPoint(Point point){
         // TODO
+        if (Math.abs(distanceToFirst(point)) < Math.abs(distanceToLast(point)))
+            points.addFirst(point);
+        else
+            points.addLast(point);
 	}
 
 	/**
-	 * Cierra el trazo. Si es necesario (TODO criterio?) lo duplica en espejo.
+	 * Cierra el trazo. Si es necesario lo duplica en espejo.
 	 */
-	public void close(){
+	public void close(double snapDistance){
         // TODO
 	}
 
@@ -30,8 +37,20 @@ public class Stroke {
      *
      * @param point Punto cuya distancia al trazo se calcula
      */
-    public int distanceTo(Point point) {
-        return 0;
+    public double distanceTo(Point point) {
+        return Math.min(distanceToFirst(point), distanceToLast(point));
+    }
+
+    private double distanceToFirst(Point point) {
+        if (points.isEmpty())
+            return Double.MAX_VALUE;
+        return Math.abs(points.getFirst().distance(point));
+    }
+
+    private double distanceToLast(Point point) {
+        if (points.isEmpty())
+            return Double.MAX_VALUE;
+        return Math.abs(points.getLast().distance(point));
     }
 
 	/**
@@ -43,6 +62,6 @@ public class Stroke {
 	 */
 	public double deltaDifferenceWith(Point point){
         // TODO
-        return 0;
+        return distanceTo(point);
 	}
 }
