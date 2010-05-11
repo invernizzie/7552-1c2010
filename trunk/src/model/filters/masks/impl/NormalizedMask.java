@@ -88,6 +88,13 @@ public class NormalizedMask implements Mask {
                     return (int)(c * factor);
             return c + offset;
         }
+
+		@Override
+		public boolean isParametrizable() {
+			return false;
+		}
+		@Override
+		public void setParameterValue(Double value) {}
     }
 
 }

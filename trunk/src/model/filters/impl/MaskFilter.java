@@ -28,4 +28,11 @@ public class MaskFilter implements Filter {
             image = mask.apply(image);
         return image;
     }
+    
+	@Override
+	public boolean isParametrizable() {
+		return false;
+	}
+	@Override
+	public void setParameterValue(Double value) {}
 }

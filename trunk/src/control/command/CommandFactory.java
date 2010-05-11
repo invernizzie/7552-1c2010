@@ -137,7 +137,7 @@ public class CommandFactory {
     }
      
     
-    public static MyFrameCommand buildCommand(String[] filterNames, MyFrame frame) throws CommandConstructionException {
+    public static FilterListCommand buildCommand(String[] filterNames, MyFrame frame) throws CommandConstructionException {
 
     	FilterListCommand command = (FilterListCommand)CommandFactory.getCommand(FILTER_LIST);
         if (!(command instanceof MyFrameCommand))
@@ -150,9 +150,8 @@ public class CommandFactory {
 			filters[i] = command.getFilterMap().getFilterCommand(filterName).getFilter();
         }
         command.setFilters(filters);
-        MyFrameCommand mfc = (MyFrameCommand)command;
-        mfc.setFrame(frame);
-        return mfc;
+        command.setFrame(frame);
+        return command;
 
     }
 

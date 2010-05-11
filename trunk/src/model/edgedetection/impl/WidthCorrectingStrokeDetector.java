@@ -158,5 +158,14 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
             int b = rgb & 0xff;
             return (int) (.56 *g + .33 * r+ .11 * b);
         }
+
+		@Override
+		public boolean isParametrizable() {
+			return false;
+		}
+
+		@Override
+		public void setParameterValue(Double value) {}
+
     }
 }

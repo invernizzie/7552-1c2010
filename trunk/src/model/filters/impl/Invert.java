@@ -20,5 +20,11 @@ public class Invert extends RGBImageFilter implements Filter {
 		Canvas c = new Canvas();
 		return c.createImage(new FilteredImageSource(in.getSource(),this));
 	}
-	
+
+	@Override
+	public boolean isParametrizable() {
+		return false;
+	}
+	@Override
+	public void setParameterValue(Double value) {}
 }

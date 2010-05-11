@@ -58,4 +58,12 @@ public class StrokeWidthCorrectionFilter extends Convolver {
 		return c.createImage(new MemoryImageSource(width/5, height/5, newimgpixels, 0, width/5));
 
 	}
+
+	@Override
+	public boolean isParametrizable() {
+		return false;
+	}
+
+	@Override
+	public void setParameterValue(Double value) {}
 }
