@@ -1,9 +1,17 @@
 package control.command;
 
+import java.awt.Button;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Label;
+import java.awt.Point;
+import java.awt.TextField;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import control.MyDialogHandler;
 import control.command.exceptions.CommandExecutionException;
-
-import java.awt.*;
 
 /**
  * @author Esteban I. Invernizzi
@@ -29,6 +37,18 @@ public class CommandResize extends MyFrameCommand {
         MyDialogHandler dh = new MyDialogHandler(d, frame);
         accept.addActionListener(dh);
         cancel.addActionListener(dh);
+        d.addWindowListener(new WindowListener(){
+			public void windowActivated(WindowEvent e){}
+			public void windowDeactivated(WindowEvent e){}
+			public void windowIconified(WindowEvent e){}
+			public void windowDeiconified(WindowEvent e){}
+			public void windowOpened(WindowEvent e){}
+			public void windowClosed(WindowEvent e){}
+			public void windowClosing(WindowEvent e){
+				e.getWindow().setVisible(false);
+				e.getWindow().dispose();
+			}
+		});	
         d.setVisible(true);
     }
 }

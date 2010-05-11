@@ -11,6 +11,7 @@ import control.command.CommandFactory;
 import control.command.exceptions.CommandConstructionException;
 import model.edgedetection.Stroke;
 
+import javax.security.auth.login.Configuration;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
@@ -214,7 +215,8 @@ public class MyFrame extends Frame{
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();
 		// Registrar para recibir eventos
-		addWindowListener(adapter);				
+		addWindowListener(adapter);	
+		
 	}
 
     public void enableProcessing() {

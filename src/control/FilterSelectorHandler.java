@@ -1,5 +1,6 @@
 package control;
 
+import java.awt.Checkbox;
 import java.awt.Dialog;
 import java.awt.List;
 import java.awt.event.ActionEvent;
@@ -7,9 +8,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import model.filters.Filter;
 import view.components.MyFrame;
 import control.command.CommandFactory;
-import control.command.MyFrameCommand;
+import control.command.FilterListCommand;
 import control.command.exceptions.CommandConstructionException;
 import control.command.exceptions.CommandException;
 import control.command.exceptions.CommandExecutionException;
@@ -18,14 +20,16 @@ public class FilterSelectorHandler implements ActionListener {
 	
 	private List listaDisponibles;
 	private List listaSeleccionados;
+	private Checkbox chkDefaults;
 	private Dialog d;
 	private MyFrame frame;
 	
-	public FilterSelectorHandler(List listaDisponibles, List listaSeleccionados, Dialog d, MyFrame frame){
+	public FilterSelectorHandler(List listaDisponibles, List listaSeleccionados, Checkbox chkDefaults, Dialog d, MyFrame frame){
 		this.listaDisponibles = listaDisponibles;
 		this.listaSeleccionados = listaSeleccionados;
 		this.d = d;
 		this.frame = frame;
+		this.chkDefaults = chkDefaults;
 	}
 
 	public void actionPerformed(ActionEvent ae) {
@@ -34,7 +38,6 @@ public class FilterSelectorHandler implements ActionListener {
 			String[] selectedItems = listaDisponibles.getSelectedItems();
 			for (int i = 0; i < selectedItems.length; i++) {
 				String item = selectedItems[i];
-				listaDisponibles.remove(item);
 				listaSeleccionados.add(item);
 			}
 		}
@@ -43,13 +46,24 @@ public class FilterSelectorHandler implements ActionListener {
 			for (int i = 0; i < selectedItems.length; i++) {
 				String item = selectedItems[i];
 				listaSeleccionados.remove(item);
-				listaDisponibles.add(item);
 			}		
 		}
 		else if(arg.equals("aplicarFiltros")){
 			try {
 				String[] filterNames = listaSeleccionados.getItems();
-				MyFrameCommand buildCommand = CommandFactory.buildCommand(filterNames, frame);
+				FilterListCommand buildCommand = CommandFactory.buildCommand(filterNames, frame);
+				Filter[] filters = buildCommand.getFilters();
+				for (int i = 0; i < filters.length; i++) {
+					if(filters[i].isParametrizable() && !chkDefaults.getState()){
+						
+						
+						//TODO mostrar el popup con slide
+						filters[i].setParameterValue( new Double(14) );
+						
+						
+						
+					}
+				}
 				buildCommand.execute();
 				
 			} catch (CommandConstructionException e) {

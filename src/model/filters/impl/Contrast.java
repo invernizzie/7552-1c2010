@@ -8,13 +8,15 @@ import java.awt.image.*;
 
 public class Contrast extends RGBImageFilter implements Filter {
 	
+	private double gain = 1.2;
+
+	
 	//Evita que los valores multiplicados superen 255
 	private int multclamp(int in, double factor){
 		in = (int) (in * factor);
 		return in > 255 ? 255 : in;
 	}
 	
-	private double gain = 1.2;
 	
 	private int cont(int in){
 		return (in < 128) ? (int) (in/gain) : multclamp(in, gain);
@@ -32,5 +34,24 @@ public class Contrast extends RGBImageFilter implements Filter {
 		Canvas c = new Canvas();
 		return c.createImage(new FilteredImageSource(in.getSource(),this));
 	}
+
+	public double getGain() {
+		return gain;
+	}
+
+	public void setGain(double gain) {
+		this.gain = gain;
+	}
+	
+	@Override
+	public boolean isParametrizable() {
+		return true;
+	}
+
+	@Override
+	public void setParameterValue(Double value) {
+		setGain(value);
+	}
+	
 
 }

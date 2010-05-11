@@ -77,5 +77,12 @@ public class ClampingMask implements Mask {
         private int clamp(int c) {
             return ( c > 255 ? 255 : (c < 0 ? 0 : c));
         }
+
+		@Override
+		public boolean isParametrizable() {
+			return false;
+		}
+		@Override
+		public void setParameterValue(Double value) {}
     }
 }

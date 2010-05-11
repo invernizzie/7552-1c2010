@@ -37,4 +37,14 @@ public class Binarize extends RGBImageFilter implements Filter {
             throw new IllegalArgumentException();
         this.umbral = umbral;
     }
+
+	@Override
+	public boolean isParametrizable() {
+		return true;
+	}
+
+	@Override
+	public void setParameterValue(Double value) {
+		setUmbral(value.byteValue());
+	}
 }
