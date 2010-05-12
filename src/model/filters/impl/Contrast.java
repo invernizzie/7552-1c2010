@@ -1,12 +1,15 @@
 package model.filters.impl;
 
-import model.filters.Filter;
-
 import java.awt.Canvas;
 import java.awt.Image;
-import java.awt.image.*;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.RGBImageFilter;
 
-public class Contrast extends RGBImageFilter implements Filter {
+import control.FilterEnum;
+
+import model.filters.ParametricFilter;
+
+public class Contrast extends RGBImageFilter implements ParametricFilter {
 	
 	private double gain = 1.2;
 
@@ -35,23 +38,46 @@ public class Contrast extends RGBImageFilter implements Filter {
 		return c.createImage(new FilteredImageSource(in.getSource(),this));
 	}
 
-	public double getGain() {
+	private double getGain() {
 		return gain;
 	}
 
-	public void setGain(double gain) {
+	private void setGain(double gain) {
 		this.gain = gain;
+	}
+
+
+	@Override
+	public double getValue() {
+		return getGain();
+	}
+
+
+	@Override
+	public void setValue(double value) {
+		setGain(value);
 	}
 	
 	@Override
-	public boolean isParametrizable() {
-		return true;
+	public String getFilterName() {
+		return FilterEnum.CONTRAST.getNombre();
+	}
+
+
+	@Override
+	public double getDefaultValue() {
+		return 1.2;
+	}
+	
+	@Override
+	public double getBottomLimit() {
+		return 0.001;
 	}
 
 	@Override
-	public void setParameterValue(Double value) {
-		setGain(value);
-	}
+	public double getTopLimit() {
+		return 40;
+	}	
 	
 
 }

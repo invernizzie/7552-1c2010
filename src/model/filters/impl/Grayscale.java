@@ -22,11 +22,4 @@ public class Grayscale extends RGBImageFilter implements Filter {
 		return c.createImage(new FilteredImageSource(in.getSource(),this));
 	}
 
-	@Override
-	public boolean isParametrizable() {
-		return false;
-	}
-
-	@Override
-	public void setParameterValue(Double value) {}
 }

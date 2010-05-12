@@ -59,11 +59,4 @@ public class StrokeWidthCorrectionFilter extends Convolver {
 
 	}
 
-	@Override
-	public boolean isParametrizable() {
-		return false;
-	}
-
-	@Override
-	public void setParameterValue(Double value) {}
 }

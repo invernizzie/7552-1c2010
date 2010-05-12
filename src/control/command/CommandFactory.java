@@ -137,7 +137,7 @@ public class CommandFactory {
     }
      
     
-    public static FilterListCommand buildCommand(String[] filterNames, MyFrame frame) throws CommandConstructionException {
+    public static FilterListCommand buildCommand(String[] filterNames, MyFrame frame, boolean useDefaultOnParametrics) throws CommandConstructionException {
 
     	FilterListCommand command = (FilterListCommand)CommandFactory.getCommand(FILTER_LIST);
         if (!(command instanceof MyFrameCommand))
@@ -151,6 +151,7 @@ public class CommandFactory {
         }
         command.setFilters(filters);
         command.setFrame(frame);
+        command.setUseDefaults(useDefaultOnParametrics);
         return command;
 
     }
