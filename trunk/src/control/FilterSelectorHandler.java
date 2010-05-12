@@ -7,8 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 
 import model.filters.Filter;
+import model.filters.ParametricFilter;
 import view.components.MyFrame;
 import control.command.CommandFactory;
 import control.command.FilterListCommand;
@@ -49,21 +51,11 @@ public class FilterSelectorHandler implements ActionListener {
 			}		
 		}
 		else if(arg.equals("aplicarFiltros")){
+			d.setVisible(false);
 			try {
+				
 				String[] filterNames = listaSeleccionados.getItems();
-				FilterListCommand buildCommand = CommandFactory.buildCommand(filterNames, frame);
-				Filter[] filters = buildCommand.getFilters();
-				for (int i = 0; i < filters.length; i++) {
-					if(filters[i].isParametrizable() && !chkDefaults.getState()){
-						
-						
-						//TODO mostrar el popup con slide
-						filters[i].setParameterValue( new Double(14) );
-						
-						
-						
-					}
-				}
+				FilterListCommand buildCommand = CommandFactory.buildCommand(filterNames, frame, chkDefaults.getState());
 				buildCommand.execute();
 				
 			} catch (CommandConstructionException e) {

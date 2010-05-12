@@ -1,9 +1,8 @@
 package model.filters.masks.impl;
 
-import model.filters.masks.impl.InvalidMaskException;
-import model.filters.masks.Mask;
+import java.awt.Image;
 
-import java.awt.*;
+import model.filters.masks.Mask;
 
 /**
  * @author Esteban I. Invernizzi
@@ -89,12 +88,6 @@ public class NormalizedMask implements Mask {
             return c + offset;
         }
 
-		@Override
-		public boolean isParametrizable() {
-			return false;
-		}
-		@Override
-		public void setParameterValue(Double value) {}
     }
 
 }

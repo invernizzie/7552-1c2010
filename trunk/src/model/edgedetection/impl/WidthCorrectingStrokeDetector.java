@@ -1,12 +1,17 @@
 package model.edgedetection.impl;
 
+import java.awt.Image;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import model.edgedetection.Stroke;
 import model.edgedetection.StrokeDetector;
 import model.filters.masks.impl.Convolver;
-
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 /**
  * @author Esteban I. Invernizzi (invernizzie@gmail.com)
@@ -159,13 +164,6 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
             return (int) (.56 *g + .33 * r+ .11 * b);
         }
 
-		@Override
-		public boolean isParametrizable() {
-			return false;
-		}
-
-		@Override
-		public void setParameterValue(Double value) {}
 
     }
 }

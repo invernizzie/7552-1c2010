@@ -1,16 +1,18 @@
 package model.filters.impl;
 
-import model.filters.Filter;
-
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Image;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
+
+import model.filters.ParametricFilter;
+import control.FilterEnum;
 
 /**
  * @author Esteban I. Invernizzi
  * @created 16/04/2010
  */
-public class Binarize extends RGBImageFilter implements Filter {
+public class Binarize extends RGBImageFilter implements ParametricFilter {
 
     private int umbral = 220;
 
@@ -28,23 +30,49 @@ public class Binarize extends RGBImageFilter implements Filter {
 		return (grayValue < umbral) ? 0xff000000 : 0xffffffff;
     }
 
-    public int getUmbral() {
+    private int getUmbral() {
         return umbral;
     }
 
-    public void setUmbral(byte umbral) {
-        if ((umbral > 225) || (umbral < 0))
+    private void setUmbral(int umbral) {
+        if ((umbral > 255) || (umbral < 0))
             throw new IllegalArgumentException();
         this.umbral = umbral;
     }
 
 	@Override
-	public boolean isParametrizable() {
-		return true;
+	public double getValue() {
+		return getUmbral();
+	}
+
+
+	@Override
+	public void setValue(double value) {
+		setUmbral((int)value);
 	}
 
 	@Override
-	public void setParameterValue(Double value) {
-		setUmbral(value.byteValue());
+	public String getFilterName() {
+		return FilterEnum.BINARIZE.getNombre();
 	}
+
+	@Override
+	public double getDefaultValue() {
+		return 220;
+	}
+
+	@Override
+	public double getBottomLimit() {
+		return 1;
+	}
+
+	@Override
+	public double getTopLimit() {
+		return 255;
+	}
+	
+	
+	
+
+
 }
