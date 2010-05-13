@@ -152,6 +152,7 @@ public class MyFrame extends Frame{
             secuenciaFiltros.setCommand(CommandFactory.buildCommand(CommandFactory.FILTER_SELECTOR, this));
             secuenciaFiltros.setEnabled(false);
             herramientas.add(secuenciaFiltros);
+            
 
             buscarContorno = new CommandMenuItem();
             buscarContorno.setLabel("Detectar contorno");

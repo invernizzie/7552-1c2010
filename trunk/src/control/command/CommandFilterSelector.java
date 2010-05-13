@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.List;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -22,7 +24,7 @@ public class CommandFilterSelector extends MyFrameCommand {
 	
 	@Override
 	protected void doExecute() throws CommandExecutionException {
-        Dialog d = new Dialog(frame, "Secuencia de filtros", true);
+        final Dialog d = new Dialog(frame, "Secuencia de filtros", true);
         d.setSize(new Dimension(380,280));
         d.setLocation(new Point(500,300));
         d.setLayout(new FlowLayout());
@@ -49,14 +51,18 @@ public class CommandFilterSelector extends MyFrameCommand {
         Button btnAplicar = new Button("Aplicar"); 
         Button btnCancelar = new Button("Cancelar");
        
-        btnIzquierda.setActionCommand("quitarFiltro");
-        btnDerecha.setActionCommand("agregarFiltro");
-        btnAplicar.setActionCommand("aplicarFiltros");
-        btnCancelar.setActionCommand("cancelar");
+        btnIzquierda.setActionCommand(CommandFactory.REMOVE_FILTER);
+        btnDerecha.setActionCommand(CommandFactory.ADD_FILTER);
+        btnAplicar.setActionCommand(CommandFactory.APPLY_FILTER_LIST);
         btnIzquierda.addActionListener(handler);
         btnDerecha.addActionListener(handler);
         btnAplicar.addActionListener(handler);
-        btnCancelar.addActionListener(handler);
+        btnCancelar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				d.dispose();
+			}
+		});
         
         d.add(chkDefault);
         d.add(listaDisponibles);
@@ -82,8 +88,11 @@ public class CommandFilterSelector extends MyFrameCommand {
         d.setVisible(true);
 	}
 
-	
-	
+	public FilterSelectorHandler getHandler() {
+		return handler;
+	}
+
+
 	private void completarListaDisponibles(List listaDisponibles) {
 		MasksEnum[] mascaras = MasksEnum.values();
 		for (int i = 0; i < mascaras.length; i++) {
