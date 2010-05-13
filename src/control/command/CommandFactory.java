@@ -1,16 +1,17 @@
 package control.command;
 
-import control.Constants;
-import control.MasksEnum;
-import control.command.exceptions.CommandConstructionException;
+import java.awt.event.ActionListener;
+import java.util.NoSuchElementException;
+
 import model.filters.Filter;
 import model.filters.impl.Binarize;
 import model.filters.impl.Contrast;
 import model.filters.impl.Grayscale;
 import model.filters.impl.Invert;
 import view.components.MyFrame;
-
-import java.util.NoSuchElementException;
+import control.Constants;
+import control.MasksEnum;
+import control.command.exceptions.CommandConstructionException;
 
 /**
  * @author Esteban I. Invernizzi (invernizzie@gmail.com)
@@ -33,6 +34,9 @@ public class CommandFactory {
     public static final String FILTER_SELECTOR = "FILTER_SELECTOR_COMMAND";
     public static final String FILTER_LIST = "FILTER_LIST_COMMAND";
     public static final String DETECT_EDGE = "DETECT_EDGE_COMMAND";
+    public static final String ADD_FILTER = "ADD_FILTER";
+    public static final String REMOVE_FILTER = "REMOVE_FILTER";
+    public static final String APPLY_FILTER_LIST = "APPLY_FILTER_LIST";
 
     public static Command getCommand(String commandName) throws CommandConstructionException {
 
@@ -78,6 +82,15 @@ public class CommandFactory {
 
         if (DETECT_EDGE.equals(commandName))
             return new CommandDetectEdges();
+        
+        if (ADD_FILTER.equals(commandName))
+            return new CommandAddFilter();
+        
+        if (REMOVE_FILTER.equals(commandName))
+            return new CommandRemoveFilter();
+        
+        if (APPLY_FILTER_LIST.equals(commandName))
+            return new CommandApplyFilterList();
 
         // TODO Arrojar excepcion
         return null;
@@ -113,6 +126,19 @@ public class CommandFactory {
         mfc.setFrame(frame);
         return mfc;
     }
+    
+	public static HandlerCommand buildCommand(String commandName, MyFrame frame, ActionListener handler) throws CommandConstructionException {
+
+        Command command  = CommandFactory.getCommand(commandName);
+        if (!(command instanceof HandlerCommand))
+            throw new CommandConstructionException(command);
+
+        HandlerCommand hc = (HandlerCommand)command;
+        hc.setHandler(handler);
+        hc.setFrame(frame);
+        return hc;
+	}
+
 
     public static MyFrameCommand buildCommand(MasksEnum mask, MyFrame frame) throws CommandConstructionException {
 
@@ -155,5 +181,6 @@ public class CommandFactory {
         return command;
 
     }
+
 
 }

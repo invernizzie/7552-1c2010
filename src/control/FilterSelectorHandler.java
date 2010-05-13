@@ -2,18 +2,17 @@ package control;
 
 import java.awt.Checkbox;
 import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
 
-import model.filters.Filter;
-import model.filters.ParametricFilter;
 import view.components.MyFrame;
 import control.command.CommandFactory;
 import control.command.FilterListCommand;
+import control.command.MyFrameCommand;
 import control.command.exceptions.CommandConstructionException;
 import control.command.exceptions.CommandException;
 import control.command.exceptions.CommandExecutionException;
@@ -34,42 +33,23 @@ public class FilterSelectorHandler implements ActionListener {
 		this.chkDefaults = chkDefaults;
 	}
 
+	
 	public void actionPerformed(ActionEvent ae) {
-		String arg = (String)ae.getActionCommand();
-		if(arg.equals("agregarFiltro")){
-			String[] selectedItems = listaDisponibles.getSelectedItems();
-			for (int i = 0; i < selectedItems.length; i++) {
-				String item = selectedItems[i];
-				listaSeleccionados.add(item);
-			}
-		}
-		else if(arg.equals("quitarFiltro")){
-			int selectedIndex = listaSeleccionados.getSelectedIndex();
-			listaSeleccionados.remove(selectedIndex);
-		}
-		else if(arg.equals("aplicarFiltros")){
-			d.setVisible(false);
-			try {
-				
-				String[] filterNames = listaSeleccionados.getItems();
-				FilterListCommand buildCommand = CommandFactory.buildCommand(filterNames, frame, chkDefaults.getState());
-				buildCommand.execute();
-				
-			} catch (CommandConstructionException e) {
-	            closeAll(e);
-			} catch (CommandExecutionException e) {
-	            closeAll(e);
-			}
+		String actionCommand = (String)ae.getActionCommand();
+		MyFrameCommand command = null;
+		try {
 			
-			d.dispose();
-		}
-		else if(arg.equals("cancelar")){
-			d.dispose();
+			command = CommandFactory.buildCommand(actionCommand, frame, this);
+			command.execute();
+		
+		} catch (CommandConstructionException cce) {
+			closeAll(cce);
+		} catch (CommandExecutionException cee) {
+			closeAll(cee);
 		}
 	}
 
-	
-	
+
 	public List getListaDisponibles() {
 		return listaDisponibles;
 	}
@@ -78,7 +58,16 @@ public class FilterSelectorHandler implements ActionListener {
 		return listaSeleccionados;
 	}
 
-	private void closeAll(CommandException e) {
+	public Checkbox getChkDefaults() {
+		return chkDefaults;
+	}
+
+	public Dialog getDialog() {
+		return d;
+	}
+	
+	
+	public void closeAll(CommandException e) {
 		String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
 		String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
 		JOptionPane.showMessageDialog(
@@ -89,5 +78,7 @@ public class FilterSelectorHandler implements ActionListener {
 		frame.dispose();
 		System.exit(0);
 	}
+
+
 
 }
