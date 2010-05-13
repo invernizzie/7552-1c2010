@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import model.filters.Filter;
 import model.filters.FilterMap;
 import model.filters.ParametricFilter;
