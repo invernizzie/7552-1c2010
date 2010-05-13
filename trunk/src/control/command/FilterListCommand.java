@@ -87,7 +87,6 @@ public class FilterListCommand extends MyFrameCommand {
 	    });
         
         btnAplicar.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent ae) {
 				String arg = (String)ae.getActionCommand();
 				if(arg.equals("Aplicar")){
