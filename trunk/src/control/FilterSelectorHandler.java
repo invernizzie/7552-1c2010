@@ -44,11 +44,8 @@ public class FilterSelectorHandler implements ActionListener {
 			}
 		}
 		else if(arg.equals("quitarFiltro")){
-			String[] selectedItems = listaSeleccionados.getSelectedItems();
-			for (int i = 0; i < selectedItems.length; i++) {
-				String item = selectedItems[i];
-				listaSeleccionados.remove(item);
-			}		
+			int selectedIndex = listaSeleccionados.getSelectedIndex();
+			listaSeleccionados.remove(selectedIndex);
 		}
 		else if(arg.equals("aplicarFiltros")){
 			d.setVisible(false);
