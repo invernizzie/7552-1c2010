@@ -1,6 +1,8 @@
 package control.command;
 
 import control.command.exceptions.CommandExecutionException;
+import model.edgedetection.impl.ProximityPointStroker;
+import model.edgedetection.impl.ScanningPointStroker;
 import model.edgedetection.impl.WidthCorrectingStrokeDetector;
 
 /**
@@ -10,7 +12,7 @@ import model.edgedetection.impl.WidthCorrectingStrokeDetector;
 public class CommandDetectEdges extends MyFrameCommand {
 
     protected void doExecute() throws CommandExecutionException {
-        WidthCorrectingStrokeDetector detector = new WidthCorrectingStrokeDetector(getFrame().getImage());
+        WidthCorrectingStrokeDetector detector = new WidthCorrectingStrokeDetector(getFrame().getImage(), new ProximityPointStroker());
         getFrame().setStrokes(detector.generateStrokes());
         getFrame().repaint();
     }
