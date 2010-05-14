@@ -83,24 +83,24 @@ public class MyFrame extends Frame{
             ajustar_tamanio.setLabel("Ajustar Tamaño...");
             ajustar_tamanio.setCommand(CommandFactory.buildCommand(CommandFactory.RESIZE, this));
             ajustar_tamanio.setEnabled(false);
-            binarizar = new CommandMenuItem();
+            /*binarizar = new CommandMenuItem();
             binarizar.setLabel("Binarizar");
             binarizar.setCommand(CommandFactory.buildCommand(CommandFactory.BINARIZE_FILTER, this));
-            binarizar.setEnabled(false);
+            binarizar.setEnabled(false);*/
             reset = new CommandMenuItem();
             reset.setLabel("Resetear");
             reset.setCommand(CommandFactory.buildCommand(CommandFactory.RESET, this));
             reset.setEnabled(false);
-            grayScale = new CommandCheckboxMenuItem();
+            /*grayScale = new CommandCheckboxMenuItem();
             grayScale.setLabel("Escala de Grises");
             grayScale.setCommand(CommandFactory.buildCommand(CommandFactory.GRAYSCALE_FILTER, this));
-            grayScale.setEnabled(false);
+            grayScale.setEnabled(false);*/
             
             herramientas = new Menu("Herramientas");
             herramientas.add(ajustar_tamanio);
             herramientas.add(reset);
-            herramientas.add(grayScale);
-            herramientas.add(binarizar);
+            /*herramientas.add(grayScale);
+            herramientas.add(binarizar);*/
 
             invertir = new CommandCheckboxMenuItem();
             invertir.setLabel("Invertir");
@@ -133,7 +133,7 @@ public class MyFrame extends Frame{
             prewitt.setLabel("Operador de Prewitt");
             prewitt.setCommand(CommandFactory.buildCommand(
                 new MasksEnum[] {MasksEnum.PREWITT_1, MasksEnum.PREWITT_2}, this));
-            filtros = new Menu("Filtros");
+            /*filtros = new Menu("Filtros");
             filtros.add(invertir);
             filtros.add(contraste);
             filtros.add(blur);
@@ -145,7 +145,7 @@ public class MyFrame extends Frame{
             filtros.add(laplacian);
             filtros.add(prewitt);
             herramientas.add(filtros);
-            filtros.setEnabled(false);
+            filtros.setEnabled(false);*/
             
             secuenciaFiltros = new CommandMenuItem();
             secuenciaFiltros.setLabel("Secuencia de Filtros");
@@ -181,8 +181,8 @@ public class MyFrame extends Frame{
 		exit.addActionListener(handler);
 		reset.addActionListener(handler);
 		ajustar_tamanio.addActionListener(handler);
-		grayScale.addItemListener(handler);
-        binarizar.addActionListener(handler);
+		/*grayScale.addItemListener(handler);
+        binarizar.addActionListener(handler);*/
 		invertir.addItemListener(handler);
 		contraste.addItemListener(handler);
 		blur.addItemListener(handler);
@@ -196,20 +196,20 @@ public class MyFrame extends Frame{
         secuenciaFiltros.addActionListener(handler);
         buscarContorno.addActionListener(handler);
 
-        processingMIs.add(grayScale);
+        processingMIs.add(reset);
+        processingMIs.add(ajustar_tamanio);
+        /*processingMIs.add(grayScale);
         processingMIs.add(invertir);
         processingMIs.add(contraste);
         processingMIs.add(sharpen);
         processingMIs.add(blur);
-        processingMIs.add(reset);
-        processingMIs.add(ajustar_tamanio);
         processingMIs.add(binarizar);
         processingMIs.add(lowpass);
         processingMIs.add(smooth);
         processingMIs.add(midpass);
         processingMIs.add(gaussLowpass);
         processingMIs.add(laplacian);
-        processingMIs.add(prewitt);
+        processingMIs.add(prewitt);*/
         processingMIs.add(secuenciaFiltros);
         processingMIs.add(buscarContorno);
 		
@@ -223,13 +223,13 @@ public class MyFrame extends Frame{
     public void enableProcessing() {
         for (MenuItem mi: processingMIs)
             mi.setEnabled(true);
-        filtros.setEnabled(true);
+        //filtros.setEnabled(true);
     }
 
     public void disableProcessing() {
         for (MenuItem mi: processingMIs)
             mi.setEnabled(false);
-        filtros.setEnabled(false);
+        //filtros.setEnabled(false);
     }
 
 	public int getAncho(){
@@ -246,10 +246,6 @@ public class MyFrame extends Frame{
 	
 	public void setAlto(int alto){
 		this.alto=alto;
-	}
-	
-	public Menu getMenuFiltos(){
-		return filtros;
 	}
 	
 	public void setImageOrig(Image image){
@@ -310,6 +306,23 @@ public class MyFrame extends Frame{
                     stroke.paint(graphics, Color.RED);
 		}
 	}
+
+    private static int colorIndex = 0;
+
+    private Color nextColor() {
+        colorIndex++;
+        if (colorIndex > 5)
+            colorIndex = 0;
+        switch (colorIndex) {
+            case 0: return Color.YELLOW;
+            case 1: return Color.BLUE;
+            case 2: return Color.RED;
+            case 3: return Color.GREEN;
+            case 4: return Color.MAGENTA;
+            case 5: return Color.ORANGE;
+        }
+        return Color.RED;
+    }
 		
 	class MyWindowAdapter extends WindowAdapter {			
 		public void windowClosing(WindowEvent we){

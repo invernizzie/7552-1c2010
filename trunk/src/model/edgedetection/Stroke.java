@@ -12,6 +12,14 @@ public class Stroke {
 
     Deque<Point> points = new ArrayDeque<Point>();
 
+    public Point getFirstPoint() {
+        return points.peekFirst();
+    }
+
+    public Point getLastPoint() {
+        return points.peekLast();
+    }
+
     /**
 	 * Agrega el punto al extremo mas cercano del trazo.
 	 *
@@ -42,13 +50,13 @@ public class Stroke {
     }
 
     private double distanceToFirst(Point point) {
-        if (points.isEmpty())
+        if (points.isEmpty() || (point == null))
             return Double.MAX_VALUE;
         return Math.abs(points.getFirst().distance(point));
     }
 
     private double distanceToLast(Point point) {
-        if (points.isEmpty())
+        if (points.isEmpty() || (point == null))
             return Double.MAX_VALUE;
         return Math.abs(points.getLast().distance(point));
     }
@@ -73,7 +81,7 @@ public class Stroke {
     public void paint(Graphics graphics, Color color) {
         graphics.setColor(color);
         paintAsLines(graphics);
-        paintAsDots(graphics);
+        //paintAsDots(graphics);
     }
 
     private void paintAsLines(Graphics graphics) {
@@ -84,10 +92,13 @@ public class Stroke {
             graphics.drawLine(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y);
             firstPoint = secondPoint;
         }
+        // Descomentar lo siguiente para dibujar cerrado 
+        /*
         if (points.size() > 1) {
             secondPoint = points.getFirst();
             graphics.drawLine(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y);
         }
+        */
     }
 
     private void paintAsDots(Graphics graphics) {
