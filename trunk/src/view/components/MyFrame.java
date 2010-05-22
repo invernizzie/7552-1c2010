@@ -38,7 +38,8 @@ public class MyFrame extends Frame{
             laplacian,
             prewitt,
             secuenciaFiltros,
-            buscarContorno;
+            buscarContorno,
+            fourier;
     private java.util.List<MenuItem> processingMIs = new ArrayList<MenuItem>();
 	private int ancho, alto;
 	private final static int alturaMenu = 50;
@@ -159,6 +160,12 @@ public class MyFrame extends Frame{
             buscarContorno.setCommand(CommandFactory.buildCommand(CommandFactory.DETECT_EDGE, this));
             buscarContorno.setEnabled(false);
             herramientas.add(buscarContorno);
+            
+            fourier = new CommandMenuItem();
+            fourier.setLabel("Aplicar DFT");
+            fourier.setCommand(CommandFactory.buildCommand(CommandFactory.DFT, this));
+            fourier.setEnabled(false);
+            herramientas.add(fourier);            
 
         } catch (CommandConstructionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
@@ -195,6 +202,7 @@ public class MyFrame extends Frame{
         prewitt.addActionListener(handler);
         secuenciaFiltros.addActionListener(handler);
         buscarContorno.addActionListener(handler);
+        fourier.addActionListener(handler);
 
         processingMIs.add(reset);
         processingMIs.add(ajustar_tamanio);
@@ -212,6 +220,7 @@ public class MyFrame extends Frame{
         processingMIs.add(prewitt);*/
         processingMIs.add(secuenciaFiltros);
         processingMIs.add(buscarContorno);
+        processingMIs.add(fourier);
 		
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();
