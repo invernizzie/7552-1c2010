@@ -1,5 +1,7 @@
 package model.edgedetection;
 
+import model.util.PointUtils;
+
 import java.awt.*;
 import java.util.*;
 
@@ -107,5 +109,32 @@ public class Stroke {
             Point point = pointIterator.next();
             graphics.fillOval(point.x-2, point.y-2, 4, 4);
         }
+    }
+
+    public Point getFirstDirection() {
+        // Calcula la direccion entre el primero y el segundo restandolos.
+        Point first = points.pollFirst();
+        if (first == null)
+            return new Point(0 ,0);
+        Point second = points.peekFirst();
+        points.addFirst(first);
+        if (second == null)
+            return new Point(0 ,0);
+
+        return PointUtils.difference(first, second);
+    }
+
+    public Point getLastDirection() {
+        // Calcula la direccion entre el ultimo y el anteultimo restandolos.
+        // Calcula la direccion entre el primero y el segundo restandolos.
+        Point last = points.pollLast();
+        if (last == null)
+            return new Point(0 ,0);
+        Point penultimate = points.peekLast();
+        points.addLast(last);
+        if (penultimate == null)
+            return new Point(0 ,0);
+
+        return PointUtils.difference(last, penultimate);
     }
 }

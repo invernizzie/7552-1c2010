@@ -22,7 +22,6 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
 
     private Image image;
     private StrokeWidthCorrectionConvolver convolver = new StrokeWidthCorrectionConvolver();
-    private List<Stroke> strokes = null;
     private Set<Point> points = new HashSet<Point>();
     private PointStroker pointStroker;
 
@@ -37,7 +36,7 @@ public class WidthCorrectingStrokeDetector implements StrokeDetector {
 
     public List<Stroke> generateStrokes() {
         detectPoints();
-        strokes = pointStroker.determineStrokes(points);
+        List<Stroke> strokes = pointStroker.determineStrokes(points);
         return (strokes == null) ? null : Collections.unmodifiableList(strokes);
     }
 
