@@ -2,9 +2,12 @@ package model.edgedetection.impl;
 
 import model.edgedetection.ProximityPointSet;
 import model.edgedetection.Stroke;
+import model.util.PointUtils;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,19 +16,16 @@ import java.util.Set;
  */
 public class SimpleProximityPointSet implements ProximityPointSet {
 
-    Set<Point> points = new HashSet<Point>();
+    protected Set<Point> points = new HashSet<Point>();
 
     public Point popNearestTo(Stroke stroke, double maxDistance) {
         Point result = peekNearestTo(stroke, maxDistance);
-        if (result != null)
-            points.remove(result);
-        return result;
+        return pop(result);
     }
 
     public Point popNearestTo(Stroke stroke) {
         Point result = peekNearestTo(stroke);
-        points.remove(result);
-        return result;
+        return pop(result);
     }
 
     public Point peekNearestTo(Stroke stroke, double maxDistance) {
@@ -40,7 +40,7 @@ public class SimpleProximityPointSet implements ProximityPointSet {
         Point nearestToLast = peekNearestTo(stroke.getLastPoint());
         if (nearestToFirst == null)
             return nearestToLast;
-        if (absDistance(nearestToFirst, stroke.getFirstPoint()) < absDistance(nearestToLast, stroke.getLastPoint()))
+        if (PointUtils.absDistance(nearestToFirst, stroke.getFirstPoint()) < PointUtils.absDistance(nearestToLast, stroke.getLastPoint()))
             return nearestToFirst;
         return nearestToLast;
     }
@@ -49,19 +49,15 @@ public class SimpleProximityPointSet implements ProximityPointSet {
         Point result = peekNearestTo(point);
         if (result == null)
             return null;
-        if (absDistance(result, point) > maxDistance )
+        if (PointUtils.absDistance(result, point) > maxDistance )
             return null;
-        else {
-            points.remove(result);
-            return result;
-        }
+        else
+            return pop(result);
     }
 
     public Point popNearestTo(Point point) {
         Point result = peekNearestTo(point);
-        if (result != null)
-            points.remove(result);
-        return result;
+        return pop(result);
     }
 
     public Point peekNearestTo(Point point) {
@@ -71,9 +67,9 @@ public class SimpleProximityPointSet implements ProximityPointSet {
         Point result = null;
         double minDistance = Double.MAX_VALUE;
         for (Point setPoint: points)
-            if (absDistance(setPoint, point) < minDistance) {
+            if (PointUtils.absDistance(setPoint, point) < minDistance) {
                 result = setPoint;
-                minDistance = absDistance(setPoint, point);
+                minDistance = PointUtils.absDistance(setPoint, point);
             }
         return result;
     }
@@ -87,7 +83,25 @@ public class SimpleProximityPointSet implements ProximityPointSet {
         return points.isEmpty();
     }
 
-    private double absDistance(Point p1, Point p2) {
-        return Math.abs(p1.distance(p2));
+    protected Point pop(Point point) {
+        points.remove(point);
+        return point;
+    }
+
+    /**
+     * Selecciona, de entre los puntos del set, aquellos que esten
+     * una distancia menor o igual a maxDistance de un punto.
+     *
+     * @param point Punto alrededor del cual se buscan los cercanos
+     * @param maxDistance Distancia maxima entre un punto devuelto y point
+     * @return Lista de puntos a distancia menor o igual a maxDistance de point 
+     */
+    public List<Point> nearbyPointsTo(Point point, double maxDistance) {
+        List<Point> result = new ArrayList<Point>();
+        for (Point setPoint: points)
+            if (PointUtils.absDistance(setPoint, point) <= maxDistance)
+                result.add(setPoint);
+
+        return result;
     }
 }

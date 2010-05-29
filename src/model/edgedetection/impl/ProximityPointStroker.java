@@ -14,10 +14,9 @@ import java.util.Set;
  * @author Esteban I. Invernizzi
  *         Date 13/05/2010
  */
-// TODO Agregar uso de la derivada direccional para elegir el siguiente punto
 public class ProximityPointStroker implements PointStroker{
 
-    private ProximityPointSet pointSet = new SimpleProximityPointSet();
+    private ProximityPointSet pointSet = new DirectionalProximityPointSet();
     private List<Stroke> strokes;
     private double snapDistance = 20;
 
