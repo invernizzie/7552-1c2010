@@ -79,7 +79,7 @@ public class CommandFactory {
             return new CommandFilterSelector();
         
         if (FILTER_LIST.equals(commandName))
-            return new FilterListCommand();
+            return new CommandFilterList();
 
         if (DETECT_EDGE.equals(commandName))
             return new CommandDetectEdges();
@@ -167,22 +167,23 @@ public class CommandFactory {
     }
      
     
-    public static FilterListCommand buildCommand(String[] filterNames, MyFrame frame, boolean useDefaultOnParametrics) throws CommandConstructionException {
+    public static CommandFilterList buildCommand(String[] filterNames, MyFrame frame, boolean useDefaultOnParametrics) throws CommandConstructionException {
 
-    	FilterListCommand command = (FilterListCommand)CommandFactory.getCommand(FILTER_LIST);
-        if (!(command instanceof MyFrameCommand))
+        Command command = CommandFactory.getCommand(FILTER_LIST);
+        if (!(command instanceof CommandFilterList))
             throw new CommandConstructionException(command);
+    	CommandFilterList commandFilterList = (CommandFilterList)command;
 
         Filter[] filters = new Filter[filterNames.length];
 
         for (int i = 0; i < filterNames.length; i++) {
 			String filterName = filterNames[i];
-			filters[i] = command.getFilterMap().getFilterCommand(filterName).getFilter();
+			filters[i] = commandFilterList.getFilterMap().getFilterCommand(filterName).getFilter();
         }
-        command.setFilters(filters);
-        command.setFrame(frame);
-        command.setUseDefaults(useDefaultOnParametrics);
-        return command;
+        commandFilterList.setFilters(filters);
+        commandFilterList.setFrame(frame);
+        commandFilterList.setUseDefaults(useDefaultOnParametrics);
+        return commandFilterList;
 
     }
 

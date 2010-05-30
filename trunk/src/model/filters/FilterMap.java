@@ -13,7 +13,7 @@ import control.Constants;
 import control.FilterEnum;
 import control.MasksEnum;
 
-public class FilterMap{
+public class FilterMap {
 
 	Map<String, CommandApplyFilter> map;
 

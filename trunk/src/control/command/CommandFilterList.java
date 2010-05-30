@@ -18,23 +18,23 @@ import model.filters.ParametricFilter;
 import control.command.exceptions.CommandExecutionException;
 
 
-public class FilterListCommand extends MyFrameCommand {
+public class CommandFilterList extends MyFrameCommand {
 
     Filter[] filters;
     FilterMap filterMap;
     boolean useDefaults;
     Filter currentFilter;
 
-    protected FilterListCommand() {
+    protected CommandFilterList() {
     	filterMap = new FilterMap();
     }
 
-    public FilterListCommand(Filter[] filters) {
+    public CommandFilterList(Filter[] filters) {
         this.filters = filters;
     	filterMap = new FilterMap();
     }
 
-    
+
     public void setUseDefaults(boolean useDefaults) {
 		this.useDefaults = useDefaults;
 	}

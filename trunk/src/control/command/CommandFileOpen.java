@@ -30,6 +30,7 @@ public class CommandFileOpen extends MyFrameCommand {
 				    frame.setRuta(fd.getDirectory() + fd.getFile());
 				    frame.setImage(img);
                     frame.setStrokes(null);
+                    frame.setProfile(null);
 				    frame.setImageOrig(img);
 				    frame.enableProcessing();
 				    frame.repaint();

@@ -2,7 +2,6 @@ package control;
 
 import java.awt.Checkbox;
 import java.awt.Dialog;
-import java.awt.Frame;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +10,6 @@ import javax.swing.JOptionPane;
 
 import view.components.MyFrame;
 import control.command.CommandFactory;
-import control.command.FilterListCommand;
 import control.command.MyFrameCommand;
 import control.command.exceptions.CommandConstructionException;
 import control.command.exceptions.CommandException;

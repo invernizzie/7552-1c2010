@@ -16,8 +16,8 @@ public class CommandApplyFilterList extends HandlerCommand {
 		try {
 			
 			String[] filterNames = handler.getListaSeleccionados().getItems();
-			FilterListCommand buildCommand = CommandFactory.buildCommand(filterNames, frame, handler.getChkDefaults().getState());
-			buildCommand.execute();
+			CommandFilterList commandFilterList = CommandFactory.buildCommand(filterNames, frame, handler.getChkDefaults().getState());
+			commandFilterList.execute();
 			
 		} catch (CommandConstructionException e) {
 			handler.closeAll(e);

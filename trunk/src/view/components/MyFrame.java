@@ -11,40 +11,26 @@ import control.command.CommandFactory;
 import control.command.exceptions.CommandConstructionException;
 import model.edgedetection.Stroke;
 
-import javax.security.auth.login.Configuration;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class MyFrame extends Frame{
 	
-	private CommandCheckboxMenuItem
-            grayScale,
-            invertir,
-            contraste,
-            sharpen,
-            blur;
     private String ruta;
 	private Image imageOrig;
 	private Image image;
-	private Menu filtros;
 	private CommandMenuItem
             reset,
             ajustar_tamanio,
-            binarizar,
-            lowpass,
-            smooth,
-            midpass,
-            gaussLowpass,
-            laplacian,
-            prewitt,
             secuenciaFiltros,
             buscarContorno,
             fourier;
-    private java.util.List<MenuItem> processingMIs = new ArrayList<MenuItem>();
+    private List<MenuItem> processingMIs = new ArrayList<MenuItem>();
 	private int ancho, alto;
 	private final static int alturaMenu = 50;
 	private final static int anchoIzquierdo = 7;
-    private java.util.List<Stroke> strokes = null;
+    private List<Stroke> strokes = null;
+    private Stroke profile = null;
 	
 	public MyFrame(String title) {
 		super(title);
@@ -84,77 +70,26 @@ public class MyFrame extends Frame{
             ajustar_tamanio.setLabel("Ajustar Tamaño...");
             ajustar_tamanio.setCommand(CommandFactory.buildCommand(CommandFactory.RESIZE, this));
             ajustar_tamanio.setEnabled(false);
-            /*binarizar = new CommandMenuItem();
-            binarizar.setLabel("Binarizar");
-            binarizar.setCommand(CommandFactory.buildCommand(CommandFactory.BINARIZE_FILTER, this));
-            binarizar.setEnabled(false);*/
             reset = new CommandMenuItem();
             reset.setLabel("Resetear");
             reset.setCommand(CommandFactory.buildCommand(CommandFactory.RESET, this));
             reset.setEnabled(false);
-            /*grayScale = new CommandCheckboxMenuItem();
-            grayScale.setLabel("Escala de Grises");
-            grayScale.setCommand(CommandFactory.buildCommand(CommandFactory.GRAYSCALE_FILTER, this));
-            grayScale.setEnabled(false);*/
             
             herramientas = new Menu("Herramientas");
             herramientas.add(ajustar_tamanio);
             herramientas.add(reset);
-            /*herramientas.add(grayScale);
-            herramientas.add(binarizar);*/
 
-            invertir = new CommandCheckboxMenuItem();
-            invertir.setLabel("Invertir");
-            invertir.setCommand(CommandFactory.buildCommand(CommandFactory.INVERSION_FILTER, this));
-            contraste = new CommandCheckboxMenuItem();
-            contraste.setLabel("Contraste");
-            contraste.setCommand(CommandFactory.buildCommand(CommandFactory.CONTRAST_FILTER, this));
-            blur = new CommandCheckboxMenuItem();
-            blur.setLabel("Blur");
-            blur.setCommand(CommandFactory.buildCommand(MasksEnum.BLUR, this));
-            sharpen = new CommandCheckboxMenuItem();
-            sharpen.setLabel("Sharpen");
-            sharpen.setCommand(CommandFactory.buildCommand(MasksEnum.SHARPEN, this));
-            lowpass = new CommandMenuItem();
-            lowpass.setLabel("Filtro pasa bajos");
-            lowpass.setCommand(CommandFactory.buildCommand(MasksEnum.LOW_PASS, this));
-            smooth = new CommandMenuItem();
-            smooth.setLabel("Smooth");
-            smooth.setCommand(CommandFactory.buildCommand(MasksEnum.SMOOTH, this));
-            midpass = new CommandMenuItem();
-            midpass.setLabel("Filtro pasa medios");
-            midpass.setCommand(CommandFactory.buildCommand(MasksEnum.MID_PASS, this));
-            gaussLowpass = new CommandMenuItem();
-            gaussLowpass.setLabel("Pasa bajos Gaussiano");
-            gaussLowpass.setCommand(CommandFactory.buildCommand(MasksEnum.GAUSS_LOW_PASS, this));
-            laplacian = new CommandMenuItem();
-            laplacian.setLabel("Laplaciano");
-            laplacian.setCommand(CommandFactory.buildCommand(MasksEnum.LAPLACIAN, this));
-            prewitt = new CommandMenuItem();
-            prewitt.setLabel("Operador de Prewitt");
+            /* TODO Usar esto para agregar Prewitt como unica entrada a la lista de filtros
             prewitt.setCommand(CommandFactory.buildCommand(
                 new MasksEnum[] {MasksEnum.PREWITT_1, MasksEnum.PREWITT_2}, this));
-            /*filtros = new Menu("Filtros");
-            filtros.add(invertir);
-            filtros.add(contraste);
-            filtros.add(blur);
-            filtros.add(sharpen);
-            filtros.add(lowpass);
-            filtros.add(smooth);
-            filtros.add(midpass);
-            filtros.add(gaussLowpass);
-            filtros.add(laplacian);
-            filtros.add(prewitt);
-            herramientas.add(filtros);
-            filtros.setEnabled(false);*/
-            
+             */
+
             secuenciaFiltros = new CommandMenuItem();
             secuenciaFiltros.setLabel("Secuencia de Filtros");
             secuenciaFiltros.setCommand(CommandFactory.buildCommand(CommandFactory.FILTER_SELECTOR, this));
             secuenciaFiltros.setEnabled(false);
             herramientas.add(secuenciaFiltros);
             
-
             buscarContorno = new CommandMenuItem();
             buscarContorno.setLabel("Detectar contorno");
             buscarContorno.setCommand(CommandFactory.buildCommand(CommandFactory.DETECT_EDGE, this));
@@ -188,36 +123,12 @@ public class MyFrame extends Frame{
 		exit.addActionListener(handler);
 		reset.addActionListener(handler);
 		ajustar_tamanio.addActionListener(handler);
-		/*grayScale.addItemListener(handler);
-        binarizar.addActionListener(handler);*/
-		invertir.addItemListener(handler);
-		contraste.addItemListener(handler);
-		blur.addItemListener(handler);
-		sharpen.addItemListener(handler);
-        lowpass.addActionListener(handler);
-        smooth.addActionListener(handler);
-        midpass.addActionListener(handler);
-        gaussLowpass.addActionListener(handler);
-        laplacian.addActionListener(handler);
-        prewitt.addActionListener(handler);
         secuenciaFiltros.addActionListener(handler);
         buscarContorno.addActionListener(handler);
         fourier.addActionListener(handler);
 
         processingMIs.add(reset);
         processingMIs.add(ajustar_tamanio);
-        /*processingMIs.add(grayScale);
-        processingMIs.add(invertir);
-        processingMIs.add(contraste);
-        processingMIs.add(sharpen);
-        processingMIs.add(blur);
-        processingMIs.add(binarizar);
-        processingMIs.add(lowpass);
-        processingMIs.add(smooth);
-        processingMIs.add(midpass);
-        processingMIs.add(gaussLowpass);
-        processingMIs.add(laplacian);
-        processingMIs.add(prewitt);*/
         processingMIs.add(secuenciaFiltros);
         processingMIs.add(buscarContorno);
         processingMIs.add(fourier);
@@ -232,13 +143,11 @@ public class MyFrame extends Frame{
     public void enableProcessing() {
         for (MenuItem mi: processingMIs)
             mi.setEnabled(true);
-        //filtros.setEnabled(true);
     }
 
     public void disableProcessing() {
         for (MenuItem mi: processingMIs)
             mi.setEnabled(false);
-        //filtros.setEnabled(false);
     }
 
 	public int getAncho(){
@@ -289,6 +198,14 @@ public class MyFrame extends Frame{
         this.strokes = strokes;
     }
 
+    public Stroke getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Stroke profile) {
+        this.profile = profile;
+    }
+
     public void paint(Graphics graphics){
 		
 		if(image!=null){
@@ -312,7 +229,9 @@ public class MyFrame extends Frame{
             graphics.translate(2, 2);
             if (strokes != null)
                 for(Stroke stroke: strokes)
-                    stroke.paint(graphics, Color.RED);
+                    stroke.paint(graphics, nextColor());
+            if (profile != null)
+                profile.paint(graphics, Color.RED);
 		}
 	}
 
@@ -325,7 +244,7 @@ public class MyFrame extends Frame{
         switch (colorIndex) {
             case 0: return Color.YELLOW;
             case 1: return Color.BLUE;
-            case 2: return Color.RED;
+            case 2: return Color.CYAN;
             case 3: return Color.GREEN;
             case 4: return Color.MAGENTA;
             case 5: return Color.ORANGE;

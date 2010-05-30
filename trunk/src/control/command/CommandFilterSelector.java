@@ -25,7 +25,7 @@ public class CommandFilterSelector extends MyFrameCommand {
 	@Override
 	protected void doExecute() throws CommandExecutionException {
         final Dialog d = new Dialog(frame, "Secuencia de filtros", true);
-        d.setSize(new Dimension(380,280));
+        d.setSize(new Dimension(400,280));
         d.setLocation(new Point(500,300));
         d.setLayout(new FlowLayout());
 
@@ -58,7 +58,6 @@ public class CommandFilterSelector extends MyFrameCommand {
         btnDerecha.addActionListener(handler);
         btnAplicar.addActionListener(handler);
         btnCancelar.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				d.dispose();
 			}
