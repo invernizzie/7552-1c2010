@@ -4,6 +4,7 @@ import model.util.PointUtils;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author Esteban I. Invernizzi (invernizzie@gmail.com)
@@ -28,18 +29,10 @@ public class Stroke {
 	 * @param point
 	 */
 	public void addPoint(Point point){
-        // TODO
         if (Math.abs(distanceToFirst(point)) < Math.abs(distanceToLast(point)))
             points.addFirst(point);
         else
             points.addLast(point);
-	}
-
-	/**
-	 * Cierra el trazo. Si es necesario lo duplica en espejo.
-	 */
-	public void close(double snapDistance){
-        // TODO
 	}
 
     /**
@@ -136,5 +129,65 @@ public class Stroke {
             return new Point(0 ,0);
 
         return PointUtils.difference(last, penultimate);
+    }
+
+    /**
+     * Duplica el trazo en espejo.
+     * Mas precisamente, aplica un eje de simetria de linea vertical,
+     * sobre la coordenada X del punto mas a la derecha del trazo.
+     */
+    public void mirror() {
+        if ((points == null) || (points.size() < 2))
+            return;
+
+        int rightmost = rightmostEnd();
+        int symmetryLimit;
+        List<Point> duplicated = new ArrayList<Point>();
+        Iterator<Point> pointIterator;
+        if (rightmost == FIRST_END)
+            pointIterator = points.iterator();
+        else
+            pointIterator = points.descendingIterator();
+
+        symmetryLimit = 2 * pointIterator.next().x;
+        while (pointIterator.hasNext()) {
+            Point original = pointIterator.next();
+            duplicated.add(new Point(symmetryLimit - original.x, original.y));
+        }
+
+        if (rightmost == FIRST_END)
+            for (Point duplicate: duplicated)
+                points.addFirst(duplicate);
+        else
+            for (Point duplicate: duplicated)
+                points.addLast(duplicate);
+    }
+
+    private static final int FIRST_END = 0;
+    private static final int LAST_END = 1;
+
+    /**
+     * Devuelve 0 si el extremo mas a la derecha
+     * es el primero, y 1 si es el ultimo.
+     */
+    private int rightmostEnd() {
+        if (points.peekFirst().x > points.peekLast().x)
+            return FIRST_END;
+        return LAST_END;
+    }
+
+    public static Stroke determineLongest(List<Stroke> strokes) {
+        if ((strokes == null) || strokes.isEmpty())
+            return null;
+
+        Stroke result = null;
+        int maxPointAmount = -1;
+        for (Stroke stroke: strokes) {
+            if (stroke.points.size() > maxPointAmount) {
+                maxPointAmount = stroke.points.size();
+                result = stroke;
+            }
+        }
+        return result;
     }
 }
