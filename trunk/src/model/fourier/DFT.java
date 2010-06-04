@@ -1,5 +1,7 @@
 package model.fourier;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -8,12 +10,36 @@ public class DFT {
 	private int numberOfPoints;      
 	private List<Point> data;  
 
-	public DFT(List<Point> data) {
+	private DFT(List<Point> data) {
 		this.data = data;
-		this.numberOfPoints = data.size();
+	}
+	
+	public DFT(List<Point> data, int numberOfPoints){
+		this(data);
+		this.numberOfPoints = numberOfPoints;
+		if (numberOfPoints > data.size()){
+			completarLista();
+		}
 	}
 
-
+	private void completarLista(){
+		int diferencia = numberOfPoints - data.size();
+		int puntoInsercion = data.size()/2;
+		List<Point> nuevaLista = new ArrayList<Point>();
+		int i = 0;
+		for (i = 0; i < puntoInsercion; i++) {
+			nuevaLista.add(i, data.get(i));			
+		}
+		int ref = i;
+		for (int j = 0; j < diferencia; j++,i++) {
+			nuevaLista.add(i, new Point(0,0));
+		}
+		for (int k = ref; k < data.size(); k++,i++) {
+			nuevaLista.add(i, data.get(k));
+		}
+		data = nuevaLista;
+	}
+	
 	public Complex getDFTPoint(int pointNumber){
 		final double twoPi = 2 * Math.PI;
 		Complex cx = new Complex();
