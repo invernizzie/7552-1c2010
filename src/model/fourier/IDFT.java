@@ -30,9 +30,9 @@ public class IDFT {
 					Complex newCx = new Complex((float)Math.cos( scale ), (float)Math.sin( scale ));
 					ret = ret.add(cx.mult(newCx));
 				}
-				ret = ret.div(numberOfPoints);
 			}
 		}
+		ret = ret.div(numberOfPoints);
 		return ret;
 	}
 
