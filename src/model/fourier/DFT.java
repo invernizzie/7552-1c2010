@@ -10,38 +10,33 @@ public class DFT {
 	private int numberOfPoints;      
 	private List<Point> data;  
 
-	private DFT(List<Point> data) {
-		this.data = data;
-	}
-	
 	public DFT(List<Point> data, int numberOfPoints){
-		this(data);
+		this.data = data;
 		this.numberOfPoints = numberOfPoints;
 		if (numberOfPoints > data.size()){
-			completarLista();
+			completeList();
 		}
 	}
 
-	private void completarLista(){
-		int diferencia = numberOfPoints - data.size();
-		int puntoInsercion = data.size()/2;
-		List<Point> nuevaLista = new ArrayList<Point>();
+	private void completeList(){
+		int dif = numberOfPoints - data.size();
+		int intersectionPoint = data.size()/2;
+		List<Point> newList = new ArrayList<Point>();
 		int i = 0;
-		for (i = 0; i < puntoInsercion; i++) {
-			nuevaLista.add(i, data.get(i));			
+		for (i = 0; i < intersectionPoint; i++) {
+			newList.add(i, data.get(i));			
 		}
 		int ref = i;
-		for (int j = 0; j < diferencia; j++,i++) {
-			nuevaLista.add(i, new Point(0,0));
+		for (int j = 0; j < dif; j++,i++) {
+			newList.add(i, new Point(0,0));
 		}
 		for (int k = ref; k < data.size(); k++,i++) {
-			nuevaLista.add(i, data.get(k));
+			newList.add(i, data.get(k));
 		}
-		data = nuevaLista;
+		data = newList;
 	}
 	
 	public Complex getDFTPoint(int pointNumber){
-		final double twoPi = 2 * Math.PI;
 		Complex cx = new Complex();
 	
 		if (pointNumber >= 0 && pointNumber < numberOfPoints){
@@ -62,7 +57,7 @@ public class DFT {
 				for (int n = 0; n < numberOfPoints; n++){
 					p = (Point)data.get( n );
 					x = p.getY();
-					scale = (twoPi * n * pointNumber)/numberOfPoints;
+					scale = (2 * Math.PI * n * pointNumber)/numberOfPoints;
 					R = R + x * Math.cos( scale );
 					I = I - x * Math.sin( scale );
 				}
