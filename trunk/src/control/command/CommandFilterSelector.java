@@ -25,6 +25,7 @@ public class CommandFilterSelector extends MyFrameCommand {
 	@Override
 	protected void doExecute() throws CommandExecutionException {
         final Dialog d = new Dialog(frame, "Secuencia de filtros", true);
+        d.setResizable(false);
         d.setSize(new Dimension(400,280));
         d.setLocation(new Point(500,300));
         d.setLayout(new FlowLayout());
@@ -43,9 +44,11 @@ public class CommandFilterSelector extends MyFrameCommand {
         }
 
 
-        Checkbox chkDefault = new Checkbox("Usar valores por defecto en filtro parametrizables");
+        Checkbox chkDefault = new Checkbox("Usar parametros de filtro por defecto?");
+        Checkbox chkSaveFilter = new Checkbox("Guardar seleccion?");
         chkDefault.setState(true);
-        handler = new FilterSelectorHandler(listaDisponibles, listaSeleccionados,chkDefault, d, frame);
+        chkSaveFilter.setState(false);
+        handler = new FilterSelectorHandler(listaDisponibles, listaSeleccionados,chkDefault,chkSaveFilter, d, frame);
         Button btnIzquierda = new Button("<<");
         Button btnDerecha = new Button(">>");
         Button btnAplicar = new Button("Aplicar"); 
@@ -64,6 +67,7 @@ public class CommandFilterSelector extends MyFrameCommand {
 		});
         
         d.add(chkDefault);
+        d.add(chkSaveFilter);
         d.add(listaDisponibles);
         d.add(btnIzquierda);
         d.add(btnDerecha);

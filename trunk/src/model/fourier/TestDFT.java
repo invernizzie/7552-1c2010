@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestDFT {
+public class TestDFT{
 
 	/**
 	 * @param args
@@ -34,11 +34,10 @@ public class TestDFT {
 			dataComplex.add(p);
 		}
 
-		System.out.println("----------------");
 		IDFT idft = new IDFT(dataComplex, N);
 		for(int i = 0; i < N; i++){
 			Complex p = idft.getIDFTPoint(i);
-			System.out.println(Math.round(p.getReal()));
+			System.out.println(Math.round(p.getReal())); //la parte imaginaria en la inversion, es siempre 0
 		}
 
 		

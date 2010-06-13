@@ -1,15 +1,14 @@
 package control.command;
 
-import control.MyMenuHandler;
-import control.command.exceptions.CommandConstructionException;
-import control.command.exceptions.CommandExecutionException;
-import view.components.MyFrame;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.FileDialog;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import control.command.exceptions.CommandExecutionException;
 
 /**
  * @author Esteban I. Invernizzi

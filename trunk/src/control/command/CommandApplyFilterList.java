@@ -1,5 +1,9 @@
 package control.command;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import control.FilterSelectorHandler;
 import control.command.exceptions.CommandConstructionException;
 import control.command.exceptions.CommandExecutionException;
@@ -17,6 +21,11 @@ public class CommandApplyFilterList extends HandlerCommand {
 			
 			String[] filterNames = handler.getListaSeleccionados().getItems();
 			CommandFilterList commandFilterList = CommandFactory.buildCommand(filterNames, frame, handler.getChkDefaults().getState());
+			
+			if(handler.getChkSaveFilter().getState()){
+				saveNewFilterSequence(filterNames, handler.getChkDefaults().getState());
+			}
+			
 			commandFilterList.execute();
 			
 		} catch (CommandConstructionException e) {
@@ -27,4 +36,26 @@ public class CommandApplyFilterList extends HandlerCommand {
 		
 		handler.getDialog().dispose();
     }
+    
+	private void saveNewFilterSequence(String[] filterNames, boolean useDeaults) {
+		boolean append = true;
+		try
+        {
+			OutputStream os = new FileOutputStream("filterList.txt", append);
+        	PrintStream p = new PrintStream(os);
+        	p.print(useDeaults + "-");
+
+        	String selection = "";
+        	for (int i = 0; i < filterNames.length; i++) {
+        		selection += filterNames[i];
+        		if(i < filterNames.length - 1)
+        			selection += "-";
+        	}
+        	p.println(selection);
+        	p.close();
+        	os.close();
+        }catch (Exception e){
+            System.err.println ("Error saving filters");
+        }
+	}
 }

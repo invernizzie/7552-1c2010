@@ -5,8 +5,13 @@ import java.awt.Dialog;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Iterator;
 
 import javax.swing.JOptionPane;
+
+import model.filters.Filter;
 
 import view.components.MyFrame;
 import control.command.CommandFactory;
@@ -20,15 +25,17 @@ public class FilterSelectorHandler implements ActionListener {
 	private List listaDisponibles;
 	private List listaSeleccionados;
 	private Checkbox chkDefaults;
+	private Checkbox chkSaveFilter;
 	private Dialog d;
 	private MyFrame frame;
 	
-	public FilterSelectorHandler(List listaDisponibles, List listaSeleccionados, Checkbox chkDefaults, Dialog d, MyFrame frame){
+	public FilterSelectorHandler(List listaDisponibles, List listaSeleccionados, Checkbox chkDefaults, Checkbox chkSaveFilter, Dialog d, MyFrame frame){
 		this.listaDisponibles = listaDisponibles;
 		this.listaSeleccionados = listaSeleccionados;
 		this.d = d;
 		this.frame = frame;
 		this.chkDefaults = chkDefaults;
+		this.chkSaveFilter = chkSaveFilter;
 	}
 
 	
@@ -36,10 +43,8 @@ public class FilterSelectorHandler implements ActionListener {
 		String actionCommand = (String)ae.getActionCommand();
 		MyFrameCommand command = null;
 		try {
-			
 			command = CommandFactory.buildCommand(actionCommand, frame, this);
 			command.execute();
-		
 		} catch (CommandConstructionException cce) {
 			closeAll(cce);
 		} catch (CommandExecutionException cee) {
@@ -58,6 +63,10 @@ public class FilterSelectorHandler implements ActionListener {
 
 	public Checkbox getChkDefaults() {
 		return chkDefaults;
+	}
+	
+	public Checkbox getChkSaveFilter() {
+		return chkSaveFilter;
 	}
 
 	public Dialog getDialog() {

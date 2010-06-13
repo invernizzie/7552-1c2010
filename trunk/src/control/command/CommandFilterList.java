@@ -38,10 +38,10 @@ public class CommandFilterList extends MyFrameCommand {
     public void setUseDefaults(boolean useDefaults) {
 		this.useDefaults = useDefaults;
 	}
-
     
 	protected void doExecute() throws CommandExecutionException {
         frame.setImage(frame.getImageOrig());
+        //frame
         frame.repaint();
         for (int i = 0; i < filters.length; i++) {
         	currentFilter = filters[i];

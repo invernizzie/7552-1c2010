@@ -2,6 +2,7 @@ package control.command;
 
 import java.awt.event.ActionListener;
 import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import model.filters.Filter;
 import model.filters.impl.Binarize;
@@ -38,6 +39,7 @@ public class CommandFactory {
     public static final String ADD_FILTER = "ADD_FILTER";
     public static final String REMOVE_FILTER = "REMOVE_FILTER";
     public static final String APPLY_FILTER_LIST = "APPLY_FILTER_LIST";
+    public static final String APPLY_SAVED_FILTER_LIST = "APPLY_SAVED_FILTER_LIST";
 
     public static Command getCommand(String commandName) throws CommandConstructionException {
 
@@ -95,6 +97,9 @@ public class CommandFactory {
         
         if (APPLY_FILTER_LIST.equals(commandName))
             return new CommandApplyFilterList();
+        
+        if (APPLY_SAVED_FILTER_LIST.equals(commandName))
+            return new CommandApplySavedFilterList();        
 
         // TODO Arrojar excepcion
         return null;
@@ -186,6 +191,15 @@ public class CommandFactory {
         return commandFilterList;
 
     }
+
+    public static CommandFilterList buildCommand(String applySavedFilterList, String secuencia, MyFrame myFrame) {
+    	StringTokenizer tokenizer = new StringTokenizer(secuencia,"-");
+    	while(tokenizer.hasMoreTokens()){
+    		String filterName = tokenizer.nextToken();
+    		
+    	}
+    	return null;
+	}
 
 
 }

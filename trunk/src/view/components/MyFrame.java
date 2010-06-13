@@ -1,17 +1,28 @@
 package view.components;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import control.MasksEnum;
+import javax.swing.JOptionPane;
+
+import model.edgedetection.Stroke;
 import control.MyMenuHandler;
 import control.command.CommandFactory;
 import control.command.exceptions.CommandConstructionException;
-import model.edgedetection.Stroke;
-
-import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class MyFrame extends Frame{
@@ -101,7 +112,23 @@ public class MyFrame extends Frame{
             fourier.setCommand(CommandFactory.buildCommand(CommandFactory.DFT, this));
             fourier.setEnabled(false);
             herramientas.add(fourier);            
+            mbar.add(herramientas);
 
+            
+            Menu filtrosGuardados = new Menu("Filtros Guardados");
+            List<String> openFilterSequencesSaved = openFilterSequencesSaved();
+            for (Iterator<String> iterator = openFilterSequencesSaved.iterator(); iterator.hasNext();) {
+				String secuencia = (String) iterator.next();
+				CommandMenuItem menuItem = new CommandMenuItem();
+				menuItem.setLabel(secuencia);
+				menuItem.addActionListener(handler);
+				menuItem.setCommand(CommandFactory.buildCommand(CommandFactory.APPLY_SAVED_FILTER_LIST, secuencia, this));
+				filtrosGuardados.add(menuItem);
+			}
+            mbar.add(filtrosGuardados);
+            
+            setMenuBar(mbar);
+            
         } catch (CommandConstructionException e) {
             String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
             String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());
@@ -113,8 +140,8 @@ public class MyFrame extends Frame{
             System.exit(0);
         }
 		
-		mbar.add(herramientas);
-        setMenuBar(mbar);
+        
+        
 
 		//Se registra MyMenuHandler para recibir los eventos
 		open.addActionListener(handler);
@@ -257,6 +284,23 @@ public class MyFrame extends Frame{
 			MyFrame.this.dispose();
 			System.exit(0);
 		}			
+	}
+	
+	private List<String> openFilterSequencesSaved() {
+		List<String> ret = new ArrayList<String>();
+		try
+        {
+            FileInputStream fstream = new FileInputStream("filterList.txt");
+            BufferedReader in = new BufferedReader(new InputStreamReader(fstream));
+            while (in.ready()){
+            	ret.add(in.readLine());
+            }
+            in.close();
+            fstream.close();
+        }catch (Exception e){
+            System.err.println ("Error reading filters");
+        }
+        return ret;
 	}
 		
 }
