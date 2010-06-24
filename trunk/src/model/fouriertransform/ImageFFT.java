@@ -138,7 +138,7 @@ public class ImageFFT {
 				}
 			break;
 
-		default:  // Sin función de windowing
+		default:  // Sin funciÃ³n de windowing
 			for (int y = 0; y < image.getHeight(); ++y)
 				for (int x = 0; x < image.getWidth(); ++x)
 					data[y*width+x].re = raster.getSample(x, y, 0);
@@ -632,9 +632,9 @@ public class ImageFFT {
 	/**
 	 * Realiza una FFT unidimensional sobre los datos especificados.
 	 * @param data input, previamente reordenada
-	 * @param tamaño de los datos
+	 * @param size tamaÃ±o de los datos
 	 * @param log2n en base 2 del numero de elementos
-	 * @param direccion de la transformada
+	 * @param dir direccion de la transformada
 	 */
 
 	private static void fft(Complex[] data, int size, int log2n, int dir) {
