@@ -10,6 +10,8 @@ public class CommandReset extends MyFrameCommand {
 
     protected void doExecute() throws CommandExecutionException {
         frame.setImage(frame.getImageOrig());
+        frame.setStrokes(null);
+        frame.setProfile(null);
         frame.repaint();
     }
 }

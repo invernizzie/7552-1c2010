@@ -23,6 +23,7 @@ public class FilterMap {
 		map.put(MasksEnum.SHARPEN.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.SHARPEN)));
 		map.put(MasksEnum.LOW_PASS.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.LOW_PASS)));
 		map.put(MasksEnum.MID_PASS.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.MID_PASS)));
+        map.put(MasksEnum.LAPLACIAN.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.LAPLACIAN)));
 		map.put(MasksEnum.PREWITT_1.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.PREWITT_1)));
 		map.put(MasksEnum.PREWITT_2.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.PREWITT_2)));
 		map.put(MasksEnum.GAUSS_LOW_PASS.getNombre(), new CommandApplyFilter(Constants.getMaskFilter(MasksEnum.GAUSS_LOW_PASS)));

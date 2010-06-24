@@ -3,16 +3,16 @@ package model.fouriertransform.tools;
 /**
  * 
  * @author Cristian
- * Implementación de un número complejo
+ * RepresentaciÃ³n de un nÃºmero complejo
  *
  */
 
 public class Complex {
 
-	/** Parte real de un número. */
+	/** Parte real de un nÃºmero. */
 	public float re;
 
-	/** Parte imaginaria de un numero. */
+	/** Parte imaginaria de un nÃºmero. */
 	public float im;
 
 
