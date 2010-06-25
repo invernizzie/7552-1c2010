@@ -15,8 +15,4 @@ public class CommandConstructionException extends CommandException {
     public CommandConstructionException(Throwable cause, Command command) {
         super(cause, command);
     }
-    
-    public CommandConstructionException(String message) {
-		super(message);
-	}
 }

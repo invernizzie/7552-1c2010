@@ -10,7 +10,6 @@ import java.awt.MenuItem;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import control.command.CommandApplyFilter;
 import model.edgedetection.Stroke;
 import control.MyMenuHandler;
 import control.command.CommandFactory;
@@ -167,7 +167,10 @@ public class MyFrame extends Frame{
 			CommandMenuItem menuItem = new CommandMenuItem();
 			menuItem.setLabel(secuencia);
 			menuItem.addActionListener(new MyMenuHandler(this));
-			menuItem.setCommand(CommandFactory.buildCommand(CommandFactory.APPLY_SAVED_FILTER_LIST, secuencia, this));
+			//menuItem.setCommand(CommandFactory.buildCommand(CommandFactory.APPLY_SAVED_FILTER_LIST, secuencia, this));
+			menuItem.setCommand(CommandFactory.buildCommand(
+                    CommandApplyFilter.extractFilterNames(secuencia), this,
+                    CommandApplyFilter.determineParametricsChoice(secuencia)));
 			filtrosGuardados.add(menuItem);
 		}
 	}

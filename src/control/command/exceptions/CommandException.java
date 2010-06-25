@@ -15,10 +15,6 @@ public abstract class CommandException extends NestedException {
         this.command = command;
     }
 
-    public CommandException(String message) {
-		super(message);
-	}
-
 	public Command getCommand() {
         return command;
     }
