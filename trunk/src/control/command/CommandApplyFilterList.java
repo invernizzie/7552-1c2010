@@ -54,7 +54,7 @@ public class CommandApplyFilterList extends HandlerCommand {
         			selection += "-";
         	}
         	List<String> filterList = new ArrayList<String>(); 
-        	filterList.add(selection);
+        	filterList.add(useDeaults + "-" + selection);
         	try {
 				frame.loadSavedFilters(filterList);
 			} catch (CommandConstructionException e) {
