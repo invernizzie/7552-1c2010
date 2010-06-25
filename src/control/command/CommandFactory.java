@@ -195,12 +195,15 @@ public class CommandFactory {
     	if (!applySavedFilterList.equals("APPLY_SAVED_FILTER_LIST")){
     		throw new CommandConstructionException("The filter must be APPLY_SAVED_FILTER_LIST");
     	}
+    	boolean defaultParameters = false;
     	StringTokenizer tokenizer = new StringTokenizer(secuencia,"-");
     	List<String> filters = new ArrayList<String>();
     	while(tokenizer.hasMoreTokens()){
     		String filterName = tokenizer.nextToken();
-    		if(!filterName.equals("true")){
+    		if(!filterName.equals("true") || !filterName.equals("true")){
     			filters.add(filterName);
+    		}else if (filterName.equals("true")){
+    			defaultParameters = true;
     		}
     		
     	}
@@ -209,7 +212,7 @@ public class CommandFactory {
     	for (int i = 0; i < filter_list.length; i++) {
 			filter_list[i] = (String) filter_list_aux[i];
 		}
-    	return buildCommand(filter_list, myFrame, false);
+    	return buildCommand(filter_list, myFrame, defaultParameters);
 	}
 
 
