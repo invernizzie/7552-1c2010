@@ -3,6 +3,8 @@ package control.command;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import control.FilterSelectorHandler;
 import control.command.exceptions.CommandConstructionException;
@@ -51,6 +53,13 @@ public class CommandApplyFilterList extends HandlerCommand {
         		if(i < filterNames.length - 1)
         			selection += "-";
         	}
+        	List<String> filterList = new ArrayList<String>(); 
+        	filterList.add(selection);
+        	try {
+				frame.loadSavedFilters(filterList);
+			} catch (CommandConstructionException e) {
+				System.err.println ("Error loading filters in menu");
+			}
         	p.println(selection);
         	p.close();
         	os.close();

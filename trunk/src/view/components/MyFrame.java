@@ -37,6 +37,7 @@ public class MyFrame extends Frame{
             buscarContorno,
             fourier;
     private List<MenuItem> processingMIs = new ArrayList<MenuItem>();
+    private Menu filtrosGuardados;
 	private int ancho, alto;
 	private final static int alturaMenu = 50;
 	private final static int anchoIzquierdo = 7;
@@ -115,16 +116,9 @@ public class MyFrame extends Frame{
             mbar.add(herramientas);
 
             
-            Menu filtrosGuardados = new Menu("Filtros Guardados");
+            filtrosGuardados = new Menu("Filtros Guardados");
             List<String> openFilterSequencesSaved = openFilterSequencesSaved();
-            for (Iterator<String> iterator = openFilterSequencesSaved.iterator(); iterator.hasNext();) {
-				String secuencia = (String) iterator.next();
-				CommandMenuItem menuItem = new CommandMenuItem();
-				menuItem.setLabel(secuencia);
-				menuItem.addActionListener(handler);
-				menuItem.setCommand(CommandFactory.buildCommand(CommandFactory.APPLY_SAVED_FILTER_LIST, secuencia, this));
-				filtrosGuardados.add(menuItem);
-			}
+            loadSavedFilters(openFilterSequencesSaved);
             mbar.add(filtrosGuardados);
             
             setMenuBar(mbar);
@@ -165,6 +159,17 @@ public class MyFrame extends Frame{
 		// Registrar para recibir eventos
 		addWindowListener(adapter);	
 		
+	}
+	
+	public void loadSavedFilters(List<String> openFilterSequencesSaved) throws CommandConstructionException{
+		for (Iterator<String> iterator = openFilterSequencesSaved.iterator(); iterator.hasNext();) {
+			String secuencia = (String) iterator.next();
+			CommandMenuItem menuItem = new CommandMenuItem();
+			menuItem.setLabel(secuencia);
+			menuItem.addActionListener(new MyMenuHandler(this));
+			menuItem.setCommand(CommandFactory.buildCommand(CommandFactory.APPLY_SAVED_FILTER_LIST, secuencia, this));
+			filtrosGuardados.add(menuItem);
+		}
 	}
 
     public void enableProcessing() {
@@ -298,7 +303,7 @@ public class MyFrame extends Frame{
             in.close();
             fstream.close();
         }catch (Exception e){
-            System.err.println ("Error reading filters");
+            //System.err.println ("Error reading filters");
         }
         return ret;
 	}
