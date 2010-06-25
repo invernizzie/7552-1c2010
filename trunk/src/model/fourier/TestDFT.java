@@ -38,9 +38,15 @@ public class TestDFT{
 		for(int i = 0; i < N; i++){
 			Complex p = idft.getIDFTPoint(i);
 			System.out.println(Math.round(p.getReal())); //la parte imaginaria en la inversion, es siempre 0
+            assertEquals(dataInteger.get(i).y, Math.round(p.getReal()));
+            assertEquals(0, Math.round(p.getImaginary()));
 		}
-
-		
 	}
+
+    public static void  assertEquals(Object expected, Object actual) {
+        if (!expected.equals(actual))
+            throw new RuntimeException(
+                    "Se esperaba " + expected.toString() + " y se obtuvo " + actual.toString());
+    }
 
 }
