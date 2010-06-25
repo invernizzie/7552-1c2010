@@ -14,7 +14,11 @@ public abstract class NestedException extends Throwable {
         this.cause = cause;
     }
 
-    public Throwable getCause() {
+    public NestedException(String message) {
+		super(message);
+	}
+
+	public Throwable getCause() {
         return cause;
     }
 }
