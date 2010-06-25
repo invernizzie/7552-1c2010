@@ -1,6 +1,8 @@
 package control.command;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -98,9 +100,6 @@ public class CommandFactory {
         if (APPLY_FILTER_LIST.equals(commandName))
             return new CommandApplyFilterList();
         
-        if (APPLY_SAVED_FILTER_LIST.equals(commandName))
-            return new CommandApplySavedFilterList();        
-
         // TODO Arrojar excepcion
         return null;
     }
@@ -192,13 +191,25 @@ public class CommandFactory {
 
     }
 
-    public static CommandFilterList buildCommand(String applySavedFilterList, String secuencia, MyFrame myFrame) {
+    public static CommandFilterList buildCommand(String applySavedFilterList, String secuencia, MyFrame myFrame) throws CommandConstructionException {
+    	if (!applySavedFilterList.equals("APPLY_SAVED_FILTER_LIST")){
+    		throw new CommandConstructionException("The filter must be APPLY_SAVED_FILTER_LIST");
+    	}
     	StringTokenizer tokenizer = new StringTokenizer(secuencia,"-");
+    	List<String> filters = new ArrayList<String>();
     	while(tokenizer.hasMoreTokens()){
     		String filterName = tokenizer.nextToken();
+    		if(!filterName.equals("true")){
+    			filters.add(filterName);
+    		}
     		
     	}
-    	return null;
+    	Object[] filter_list_aux = filters.toArray();
+    	String[] filter_list = new String[filter_list_aux.length];
+    	for (int i = 0; i < filter_list.length; i++) {
+			filter_list[i] = (String) filter_list_aux[i];
+		}
+    	return buildCommand(filter_list, myFrame, false);
 	}
 
 
