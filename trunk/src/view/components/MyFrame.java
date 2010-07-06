@@ -117,7 +117,7 @@ public class MyFrame extends Frame{
 
             
             filtrosGuardados = new Menu("Filtros Guardados");
-            List<String> openFilterSequencesSaved = openFilterSequencesSaved();
+            List<String> openFilterSequencesSaved = openSavedFilterSequences();
             loadSavedFilters(openFilterSequencesSaved);
             mbar.add(filtrosGuardados);
             
@@ -256,12 +256,12 @@ public class MyFrame extends Frame{
 			//Para aplicar doble buffering tambien hay que cambiar en el if de abajo "image por bi"
 
             graphics.translate(anchoIzquierdo, alturaMenu);
-			if(ancho==0 || alto==0)
+			if((ancho == 0) || (alto == 0))
 				graphics.drawImage(image, 0, 0, null);
 			else
 				graphics.drawImage(image, 0, 0, ancho, alto, null);
 
-            graphics.translate(2, 2);
+            //graphics.translate(2, 2);
             if (strokes != null)
                 for(Stroke stroke: strokes)
                     stroke.paint(graphics, nextColor());
@@ -286,15 +286,15 @@ public class MyFrame extends Frame{
         }
         return Color.RED;
     }
-		
-	class MyWindowAdapter extends WindowAdapter {			
+
+    class MyWindowAdapter extends WindowAdapter {
 		public void windowClosing(WindowEvent we){
 			MyFrame.this.dispose();
 			System.exit(0);
 		}			
 	}
 	
-	private List<String> openFilterSequencesSaved() {
+	private List<String> openSavedFilterSequences() {
 		List<String> ret = new ArrayList<String>();
 		try
         {
