@@ -35,6 +35,7 @@ public class MyFrame extends Frame{
             ajustar_tamanio,
             secuenciaFiltros,
             buscarContorno,
+            recortarContorno,
             fourier;
     private List<MenuItem> processingMIs = new ArrayList<MenuItem>();
     private Menu filtrosGuardados;
@@ -107,6 +108,12 @@ public class MyFrame extends Frame{
             buscarContorno.setCommand(CommandFactory.buildCommand(CommandFactory.DETECT_EDGE, this));
             buscarContorno.setEnabled(false);
             herramientas.add(buscarContorno);
+
+            recortarContorno = new CommandMenuItem();
+            recortarContorno.setLabel("Recortar contorno");
+            recortarContorno.setCommand(CommandFactory.buildCommand(CommandFactory.TRIM_EDGE, this));
+            recortarContorno.setEnabled(false);
+            herramientas.add(recortarContorno);
             
             fourier = new CommandMenuItem();
             fourier.setLabel("Aplicar DFT");
@@ -146,19 +153,20 @@ public class MyFrame extends Frame{
 		ajustar_tamanio.addActionListener(handler);
         secuenciaFiltros.addActionListener(handler);
         buscarContorno.addActionListener(handler);
+        recortarContorno.addActionListener(handler);
         fourier.addActionListener(handler);
 
         processingMIs.add(reset);
         processingMIs.add(ajustar_tamanio);
         processingMIs.add(secuenciaFiltros);
         processingMIs.add(buscarContorno);
+        processingMIs.add(recortarContorno);
         processingMIs.add(fourier);
 		
 		// Se crea un objeto para gestionar los eventos de la ventana
 		MyWindowAdapter adapter = new MyWindowAdapter();
 		// Registrar para recibir eventos
 		addWindowListener(adapter);	
-		
 	}
 	
 	public void loadSavedFilters(List<String> openFilterSequencesSaved) throws CommandConstructionException{
@@ -261,7 +269,6 @@ public class MyFrame extends Frame{
 			else
 				graphics.drawImage(image, 0, 0, ancho, alto, null);
 
-            //graphics.translate(2, 2);
             if (strokes != null)
                 for(Stroke stroke: strokes)
                     stroke.paint(graphics, nextColor());
@@ -287,11 +294,15 @@ public class MyFrame extends Frame{
         return Color.RED;
     }
 
+    public int getLeftOffset() {
+        return anchoIzquierdo;
+    }
+
     class MyWindowAdapter extends WindowAdapter {
 		public void windowClosing(WindowEvent we){
 			MyFrame.this.dispose();
 			System.exit(0);
-		}			
+		}
 	}
 	
 	private List<String> openSavedFilterSequences() {
