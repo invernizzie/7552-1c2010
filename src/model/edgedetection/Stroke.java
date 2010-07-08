@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Stroke {
 
-    Deque<Point> points = new ArrayDeque<Point>();
+    private Deque<Point> points = new ArrayDeque<Point>();
 
     public Point getFirstPoint() {
         return points.peekFirst();
@@ -39,6 +39,7 @@ public class Stroke {
      * Devuelve la distancia del punto al extremo mas cercano del trazo.
      *
      * @param point Punto cuya distancia al trazo se calcula
+     * @return Distancia del punto al trazo
      */
     public double distanceTo(Point point) {
         return Math.min(distanceToFirst(point), distanceToLast(point));
@@ -161,6 +162,41 @@ public class Stroke {
         else
             for (Point duplicate: duplicated)
                 points.addLast(duplicate);
+    }
+
+    /**
+     * Corta las puntas del trazo hasta el valor de x elegido.
+     *
+     * @param edgeX Valor de x a la derecha del cual se descartan
+     * las puntas (inicial y final) del trazo.
+     */
+    public void trimRightmostEndsHorizontally(int edgeX) {
+
+        Point newPoint = trimEndHorizontallyAndInterpolateExactPoint(edgeX, points.iterator());
+        if (newPoint != null)
+            points.addFirst(newPoint);
+
+        newPoint = trimEndHorizontallyAndInterpolateExactPoint(edgeX, points.descendingIterator());
+        if (newPoint != null)
+            points.addLast(newPoint);
+    }
+
+    private Point trimEndHorizontallyAndInterpolateExactPoint(int edgeX, Iterator<Point> pointIterator) {
+        if (!pointIterator.hasNext())
+            return null;
+
+        Point firstPoint = pointIterator.next();
+        Point secondPoint = firstPoint;
+        while (pointIterator.hasNext() && firstPoint.x > edgeX) {
+            firstPoint = secondPoint;
+            secondPoint = pointIterator.next();
+            
+            points.remove(firstPoint);
+            if (secondPoint.x < edgeX) {
+                return PointUtils.interpolate(edgeX, firstPoint, secondPoint);
+            }
+        }
+        return null;
     }
 
     private static final int FIRST_END = 0;
