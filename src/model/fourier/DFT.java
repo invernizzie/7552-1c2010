@@ -36,7 +36,7 @@ public class DFT {
 		data = newList;
 	}
 	
-	public Complex getDFTPoint(int pointNumber){
+	private Complex getDFTPoint(int pointNumber){
 		Complex cx = new Complex();
 	
 		if (pointNumber >= 0 && pointNumber < numberOfPoints){
@@ -67,5 +67,16 @@ public class DFT {
 		}
 		return cx;
 	}
+	
+	public List<Complex> getTranformedPointsList(){
+		List<Complex> ret = new ArrayList<Complex>();
+		for(int i = 0; i < numberOfPoints; i++){
+			Complex p = this.getDFTPoint(i);
+			ret.add(p);
+		}
+		return ret;
+	}
+	
+
 
 }
