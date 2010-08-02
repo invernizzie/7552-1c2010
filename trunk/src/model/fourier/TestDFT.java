@@ -26,13 +26,10 @@ public class TestDFT{
 		dataInteger.add(new Point(18, 198)); //198
 		
 		
-		List<Complex> dataComplex = new ArrayList<Complex>();
 		
 		DFT dft = new DFT(dataInteger, N);
-		for(int i = 0; i < N; i++){
-			Complex p = dft.getDFTPoint(i);
-			dataComplex.add(p);
-		}
+		List<Complex> dataComplex = dft.getTranformedPointsList();
+	
 
 		IDFT idft = new IDFT(dataComplex, N);
 		for(int i = 0; i < N; i++){
