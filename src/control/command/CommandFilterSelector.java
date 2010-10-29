@@ -5,10 +5,18 @@ import java.awt.Checkbox;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Label;
 import java.awt.List;
 import java.awt.Point;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -44,11 +52,25 @@ public class CommandFilterSelector extends MyFrameCommand {
         }
 
 
+        Label lblName = new Label("Nombre del Filtro");
+        final TextField txtName = new TextField("",30);
+        txtName.setEditable(false);
         Checkbox chkDefault = new Checkbox("Usar parametros de filtro por defecto?");
         Checkbox chkSaveFilter = new Checkbox("Guardar seleccion?");
+        chkSaveFilter.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				 txtName.setEditable(!txtName.isEditable());
+				 if(!txtName.isEditable())
+					 txtName.setText("");
+			}
+		});
+        
+        
+        
         chkDefault.setState(true);
         chkSaveFilter.setState(false);
-        handler = new FilterSelectorHandler(listaDisponibles, listaSeleccionados,chkDefault,chkSaveFilter, d, frame);
+        handler = new FilterSelectorHandler(listaDisponibles, listaSeleccionados,chkDefault,chkSaveFilter,txtName, d, frame);
         Button btnIzquierda = new Button("<<");
         Button btnDerecha = new Button(">>");
         Button btnAplicar = new Button("Aplicar"); 
@@ -66,12 +88,14 @@ public class CommandFilterSelector extends MyFrameCommand {
 			}
 		});
         
-        d.add(chkDefault);
-        d.add(chkSaveFilter);
         d.add(listaDisponibles);
         d.add(btnIzquierda);
         d.add(btnDerecha);
         d.add(listaSeleccionados);
+        d.add(chkDefault);
+        d.add(chkSaveFilter);
+        d.add(lblName);
+        d.add(txtName);
         d.add(btnAplicar);
         d.add(btnCancelar);
         

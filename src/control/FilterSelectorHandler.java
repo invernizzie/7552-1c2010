@@ -3,15 +3,11 @@ package control;
 import java.awt.Checkbox;
 import java.awt.Dialog;
 import java.awt.List;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.Iterator;
 
 import javax.swing.JOptionPane;
-
-import model.filters.Filter;
 
 import view.components.MyFrame;
 import control.command.CommandFactory;
@@ -26,16 +22,18 @@ public class FilterSelectorHandler implements ActionListener {
 	private List listaSeleccionados;
 	private Checkbox chkDefaults;
 	private Checkbox chkSaveFilter;
+	private TextField txtCustonName;
 	private Dialog d;
 	private MyFrame frame;
 	
-	public FilterSelectorHandler(List listaDisponibles, List listaSeleccionados, Checkbox chkDefaults, Checkbox chkSaveFilter, Dialog d, MyFrame frame){
+	public FilterSelectorHandler(List listaDisponibles, List listaSeleccionados, Checkbox chkDefaults, Checkbox chkSaveFilter,TextField txtCustonName, Dialog d, MyFrame frame){
 		this.listaDisponibles = listaDisponibles;
 		this.listaSeleccionados = listaSeleccionados;
 		this.d = d;
 		this.frame = frame;
 		this.chkDefaults = chkDefaults;
 		this.chkSaveFilter = chkSaveFilter;
+		this.txtCustonName = txtCustonName;
 	}
 
 	
@@ -73,7 +71,11 @@ public class FilterSelectorHandler implements ActionListener {
 		return d;
 	}
 	
-	
+	public TextField getTxtCustonName() {
+		return txtCustonName;
+	}
+
+
 	public void closeAll(CommandException e) {
 		String command = (e.getCommand() == null) ? "" : e.getCommand().toString();
 		String cause = e.getCause() == null ? "" : ("Causa: " + e.getCause().toString());

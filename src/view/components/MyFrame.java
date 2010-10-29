@@ -15,10 +15,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
 import control.command.CommandApplyFilter;
+import control.command.CommandFilterList;
 import model.edgedetection.Stroke;
 import control.MyMenuHandler;
 import control.command.CommandFactory;
@@ -169,20 +171,67 @@ public class MyFrame extends Frame{
 		addWindowListener(adapter);	
 	}
 	
+	public void loadSavedFilters(String[] filterNames) throws CommandConstructionException {
+		List<String> openFilterSequencesSaved = new ArrayList<String>();
+		for (int i = 0; i < filterNames.length; i++) {
+			openFilterSequencesSaved.add(filterNames[i]);
+		}
+		loadSavedFilters(openFilterSequencesSaved);
+	}
+	
 	public void loadSavedFilters(List<String> openFilterSequencesSaved) throws CommandConstructionException{
 		for (Iterator<String> iterator = openFilterSequencesSaved.iterator(); iterator.hasNext();) {
 			String secuencia = (String) iterator.next();
 			CommandMenuItem menuItem = new CommandMenuItem();
-			menuItem.setLabel(secuencia);
 			menuItem.addActionListener(new MyMenuHandler(this));
 			//menuItem.setCommand(CommandFactory.buildCommand(CommandFactory.APPLY_SAVED_FILTER_LIST, secuencia, this));
-			menuItem.setCommand(CommandFactory.buildCommand(
-                    CommandApplyFilter.extractFilterNames(secuencia), this,
-                    CommandApplyFilter.determineParametricsChoice(secuencia)));
+			String[] extractFilterNames = extractFilterNames(secuencia);
+			boolean determineParametricsChoice = determineParametricsChoice(secuencia);
+			menuItem.setLabel(getCustomFilterName(secuencia));
+			CommandFilterList buildCommand = CommandFactory.buildCommand(extractFilterNames, this, determineParametricsChoice);
+			menuItem.setCommand(buildCommand);
 			filtrosGuardados.add(menuItem);
 		}
 	}
 
+	public String[] extractTokens(String sequence){
+		StringTokenizer tokenizer = new StringTokenizer(sequence, "-");
+		String[] tokens = new String[tokenizer.countTokens()];
+		int countTokens = tokenizer.countTokens();
+		for(int i = 0; i < countTokens; i++){
+			String token = tokenizer.nextToken();
+			tokens[i] = token;
+		}
+		return tokens;
+	}
+	
+	
+    public String[] extractFilterNames(String sequence) {
+    	String[] tokens = extractTokens(sequence);
+    	if(tokens.length > 2){
+    		String[] filters = new String[tokens.length-2];
+    		for(int i = 0; i < tokens.length - 2; i++){
+    			filters[i] = tokens[ i + 2 ];
+    		}
+    		return filters;
+    	}
+    	return new String[1];
+    }
+
+    public boolean determineParametricsChoice(String sequence) {
+    	String[] tokens = extractTokens(sequence);
+    	if(tokens[1].equals("true")){
+    		return true;
+    	}
+        return false;
+    }
+    
+    public String getCustomFilterName(String sequence) {
+    	String[] tokens = extractTokens(sequence);
+    	return tokens[0];
+    }
+	
+	
     public void enableProcessing() {
         for (MenuItem mi: processingMIs)
             mi.setEnabled(true);
@@ -321,5 +370,7 @@ public class MyFrame extends Frame{
         }
         return ret;
 	}
+
+
 		
 }

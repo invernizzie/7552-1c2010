@@ -25,7 +25,13 @@ public class CommandApplyFilterList extends HandlerCommand {
 			CommandFilterList commandFilterList = CommandFactory.buildCommand(filterNames, frame, handler.getChkDefaults().getState());
 			
 			if(handler.getChkSaveFilter().getState()){
-				saveNewFilterSequence(filterNames, handler.getChkDefaults().getState());
+				String customName = handler.getTxtCustonName().getText();
+				saveNewFilterSequence(customName , filterNames, handler.getChkDefaults().getState());
+			}
+        	try {
+        		frame.loadSavedFilters(filterNames);
+			} catch (CommandConstructionException e) {
+				System.err.println ("Error loading filters in menu");
 			}
 			
 			commandFilterList.execute();
@@ -39,14 +45,14 @@ public class CommandApplyFilterList extends HandlerCommand {
 		handler.getDialog().dispose();
     }
     
-	private void saveNewFilterSequence(String[] filterNames, boolean useDeaults) {
+	private void saveNewFilterSequence(String customFilterName, String[] filterNames, boolean useDeaults) {
 		boolean append = true;
 		try
         {
 			OutputStream os = new FileOutputStream("filterList.txt", append);
         	PrintStream p = new PrintStream(os);
-        	p.print(useDeaults + "-");
-
+        	customFilterName = customFilterName.equals("") ? "default" : customFilterName;
+        	
         	String selection = "";
         	for (int i = 0; i < filterNames.length; i++) {
         		selection += filterNames[i];
@@ -54,13 +60,9 @@ public class CommandApplyFilterList extends HandlerCommand {
         			selection += "-";
         	}
         	List<String> filterList = new ArrayList<String>(); 
-        	filterList.add(useDeaults + "-" + selection);
-        	try {
-				frame.loadSavedFilters(filterList);
-			} catch (CommandConstructionException e) {
-				System.err.println ("Error loading filters in menu");
-			}
-        	p.println(selection);
+        	filterList.add(selection);
+      	
+        	p.println(customFilterName + "-" + useDeaults + "-" + selection);
         	p.close();
         	os.close();
         }catch (Exception e){
